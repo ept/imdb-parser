@@ -66,6 +66,7 @@
                             <mainClass>uk.ac.cam.cl.databases.moviedb.Import</mainClass>
                             <arguments>
                                 <argument>${project.basedir}/movies_doc.json.gz</argument>
+                                <argument>${project.basedir}/people_doc.json.gz</argument>
                                 <argument>${project.basedir}/document-db</argument>
                             </arguments>
                         </configuration>

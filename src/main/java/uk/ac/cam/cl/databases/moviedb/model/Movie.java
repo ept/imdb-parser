@@ -12,16 +12,16 @@ public class Movie {
     private int year, yearTo;
     private String info;
     private boolean suspended;
-    private List<Actor> actors;
-    private List<Person> cinematographers;
-    private List<Person> composers;
-    private List<Person> costumeDesigners;
-    private List<Person> directors;
-    private List<Person> editors;
-    private List<Person> miscellaneous;
-    private List<Person> producers;
-    private List<Person> productionDesigners;
-    private List<Writer> writers;
+    private List<CreditActor> actors;
+    private List<CreditPerson> cinematographers;
+    private List<CreditPerson> composers;
+    private List<CreditPerson> costumeDesigners;
+    private List<CreditPerson> directors;
+    private List<CreditPerson> editors;
+    private List<CreditPerson> miscellaneous;
+    private List<CreditPerson> producers;
+    private List<CreditPerson> productionDesigners;
+    private List<CreditWriter> writers;
     private List<Certificate> certificates;
     private List<ColorInfo> colorInfo;
     private List<String> countries;
@@ -99,83 +99,83 @@ public class Movie {
         this.suspended = suspended;
     }
 
-    public List<Actor> getActors() {
+    public List<CreditActor> getActors() {
         return actors;
     }
 
-    public void setActors(List<Actor> actors) {
+    public void setActors(List<CreditActor> actors) {
         this.actors = actors;
     }
 
-    public List<Person> getCinematographers() {
+    public List<CreditPerson> getCinematographers() {
         return cinematographers;
     }
 
-    public void setCinematographers(List<Person> cinematographers) {
+    public void setCinematographers(List<CreditPerson> cinematographers) {
         this.cinematographers = cinematographers;
     }
 
-    public List<Person> getComposers() {
+    public List<CreditPerson> getComposers() {
         return composers;
     }
 
-    public void setComposers(List<Person> composers) {
+    public void setComposers(List<CreditPerson> composers) {
         this.composers = composers;
     }
 
-    public List<Person> getCostumeDesigners() {
+    public List<CreditPerson> getCostumeDesigners() {
         return costumeDesigners;
     }
 
-    public void setCostumeDesigners(List<Person> costumeDesigners) {
+    public void setCostumeDesigners(List<CreditPerson> costumeDesigners) {
         this.costumeDesigners = costumeDesigners;
     }
 
-    public List<Person> getDirectors() {
+    public List<CreditPerson> getDirectors() {
         return directors;
     }
 
-    public void setDirectors(List<Person> directors) {
+    public void setDirectors(List<CreditPerson> directors) {
         this.directors = directors;
     }
 
-    public List<Person> getEditors() {
+    public List<CreditPerson> getEditors() {
         return editors;
     }
 
-    public void setEditors(List<Person> editors) {
+    public void setEditors(List<CreditPerson> editors) {
         this.editors = editors;
     }
 
-    public List<Person> getMiscellaneous() {
+    public List<CreditPerson> getMiscellaneous() {
         return miscellaneous;
     }
 
-    public void setMiscellaneous(List<Person> miscellaneous) {
+    public void setMiscellaneous(List<CreditPerson> miscellaneous) {
         this.miscellaneous = miscellaneous;
     }
 
-    public List<Person> getProducers() {
+    public List<CreditPerson> getProducers() {
         return producers;
     }
 
-    public void setProducers(List<Person> producers) {
+    public void setProducers(List<CreditPerson> producers) {
         this.producers = producers;
     }
 
-    public List<Person> getProductionDesigners() {
+    public List<CreditPerson> getProductionDesigners() {
         return productionDesigners;
     }
 
-    public void setProductionDesigners(List<Person> productionDesigners) {
+    public void setProductionDesigners(List<CreditPerson> productionDesigners) {
         this.productionDesigners = productionDesigners;
     }
 
-    public List<Writer> getWriters() {
+    public List<CreditWriter> getWriters() {
         return writers;
     }
 
-    public void setWriters(List<Writer> writers) {
+    public void setWriters(List<CreditWriter> writers) {
         this.writers = writers;
     }
 

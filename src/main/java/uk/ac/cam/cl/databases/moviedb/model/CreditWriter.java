@@ -1,6 +1,6 @@
 package uk.ac.cam.cl.databases.moviedb.model;
 
-public class Writer extends Person {
+public class CreditWriter extends CreditPerson {
     private Integer lineOrder, groupOrder, subgroupOrder;
 
     public Integer getLineOrder() {

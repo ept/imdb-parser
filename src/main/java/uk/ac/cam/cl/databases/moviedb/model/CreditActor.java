@@ -1,6 +1,6 @@
 package uk.ac.cam.cl.databases.moviedb.model;
 
-public class Actor extends Person {
+public class CreditActor extends CreditPerson {
     private String character;
     private Integer position;
 

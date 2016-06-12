@@ -1,15 +1,15 @@
 package uk.ac.cam.cl.databases.moviedb.model;
 
 public class CreditPerson {
-    private int id;
+    private int personId;
     private String name, info;
 
-    public int getId() {
-        return id;
+    public int getPersonId() {
+        return personId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setPersonId(int personId) {
+        this.personId = personId;
     }
 
     public String getName() {

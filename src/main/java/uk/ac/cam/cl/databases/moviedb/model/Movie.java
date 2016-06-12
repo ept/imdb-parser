@@ -9,9 +9,8 @@ import com.google.gson.GsonBuilder;
 public class Movie {
     private int id;
     private String title;
-    private int year, yearTo;
+    private int year;
     private String info;
-    private boolean suspended;
     private List<CreditActor> actors;
     private List<CreditPerson> cinematographers;
     private List<CreditPerson> composers;
@@ -75,28 +74,12 @@ public class Movie {
         this.year = year;
     }
 
-    public int getYearTo() {
-        return yearTo;
-    }
-
-    public void setYearTo(int yearTo) {
-        this.yearTo = yearTo;
-    }
-
     public String getInfo() {
         return info;
     }
 
     public void setInfo(String info) {
         this.info = info;
-    }
-
-    public boolean isSuspended() {
-        return suspended;
-    }
-
-    public void setSuspended(boolean suspended) {
-        this.suspended = suspended;
     }
 
     public List<CreditActor> getActors() {

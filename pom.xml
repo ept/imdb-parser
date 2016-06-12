@@ -21,18 +21,26 @@
     <packaging>jar</packaging>
 
     <dependencies>
-        <!-- JSON encoding/decoding -->
+        <!-- JSON encoding/decoding: https://github.com/google/gson/blob/master/UserGuide.md -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.6.2</version>
         </dependency>
 
-        <!-- Berkeley DB -->
+        <!-- Berkeley DB: http://docs.oracle.com/cd/E17277_02/html/GettingStartedGuide/index.html
+             http://docs.oracle.com/cd/E17277_02/html/java/index.html?com/sleepycat/je/package-summary.html -->
         <dependency>
             <groupId>com.sleepycat</groupId>
             <artifactId>je</artifactId>
             <version>5.0.73</version>
+        </dependency>
+
+        <!-- Load dependencies from classpath: https://sites.google.com/site/javacornproject/corn-cps -->
+        <dependency>
+            <groupId>net.sf.corn</groupId>
+            <artifactId>corn-cps</artifactId>
+            <version>1.1.7</version>
         </dependency>
     </dependencies>
 
@@ -47,6 +55,27 @@
                     <source>1.8</source>
                     <target>1.8</target>
                 </configuration>
+            </plugin>
+
+            <!-- Build jar file that bundles dependencies and database files -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <descriptors>
+                        <descriptor>src/main/assembly/document-jar.xml</descriptor>
+                    </descriptors>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-document-jar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

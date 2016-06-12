@@ -1,0 +1,27 @@
+<assembly>
+    <id>document-jar</id>
+    <formats>
+        <format>jar</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+
+    <dependencySets>
+        <dependencySet>
+            <outputDirectory>/</outputDirectory>
+            <useTransitiveFiltering>true</useTransitiveFiltering>
+            <unpack>true</unpack>
+            <unpackOptions>
+                <excludes>
+                    <exclude>META-INF/**</exclude>
+                </excludes>
+            </unpackOptions>
+        </dependencySet>
+    </dependencySets>
+
+    <fileSets>
+        <fileSet>
+            <directory>document-db</directory>
+            <outputDirectory>resources/document-db</outputDirectory>
+        </fileSet>
+    </fileSets>
+</assembly>

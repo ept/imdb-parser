@@ -24,7 +24,7 @@ public class Import {
     }
 
     public void process() throws IOException {
-        try (MovieDB movieDB = new MovieDB(outputDir)) {
+        try (MovieDB movieDB = new MovieDB(outputDir, false)) {
             try (BufferedReader input = readFile(moviesFile)) {
                 input.lines().forEach(json -> movieDB.putMovie(json));
             }

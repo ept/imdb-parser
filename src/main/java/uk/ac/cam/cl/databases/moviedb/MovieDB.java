@@ -31,20 +31,42 @@ public class MovieDB implements AutoCloseable {
     private SecondaryDatabase titleIndex, nameIndex;
 
     /**
-     * Opens the database, creating it if it does not yet exist.
-     * @param dataDir The directory to store the data files.
+     * Opens the database, stored in the specified directory. If the directory does not exist,
+     * the database files are extracted from resources on the classpath and written to the
+     * specified directory.
+     *
+     * @param dataDir The directory in which to store the data files.
      */
     public MovieDB(File dataDir) {
-        if (!dataDir.exists()) dataDir.mkdirs();
+        this(dataDir, true);
+    }
+
+    /**
+     * Opens the database. If the specified directory does not exist, and extractFromClasspath
+     * is false, a new empty database is created. If the specified directory does not exist,
+     * and extractFromClasspath is true, the database files are extracted from resources on
+     * the classpath and written to the specified directory.
+     *
+     * @param dataDir The directory in which to store the data files.
+     * @param extractFromClasspath If true, tries to find data files bundled as resources in a
+     *      jar on the classpath, and extracts them to dataDir.
+     */
+    MovieDB(File dataDir, boolean extractFromClasspath) {
+        if (!dataDir.exists()) {
+            dataDir.mkdirs();
+            if (extractFromClasspath) {
+                new ResourceExtractor("/resources/document-db/", dataDir).extract();
+            }
+        }
 
         EnvironmentConfig envConfig = new EnvironmentConfig();
-        envConfig.setAllowCreate(true);
+        envConfig.setAllowCreate(!extractFromClasspath);
         envConfig.setTransactional(false);
         if (dbEnv != null) throw new IllegalStateException("Database is already open");
         dbEnv = new Environment(dataDir, envConfig);
 
         DatabaseConfig dbConfig = new DatabaseConfig();
-        dbConfig.setAllowCreate(true);
+        dbConfig.setAllowCreate(!extractFromClasspath);
         dbConfig.setDeferredWrite(true);
         moviesDB = dbEnv.openDatabase(null, "movies", dbConfig);
         peopleDB = dbEnv.openDatabase(null, "people", dbConfig);

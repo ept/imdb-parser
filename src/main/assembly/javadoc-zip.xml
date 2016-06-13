@@ -1,0 +1,15 @@
+<assembly>
+    <id>javadoc-zip</id>
+    <formats>
+        <format>zip</format>
+    </formats>
+    <includeBaseDirectory>true</includeBaseDirectory>
+    <baseDirectory>moviedb-javadocs</baseDirectory>
+
+    <fileSets>
+        <fileSet>
+            <directory>target/site/apidocs</directory>
+            <outputDirectory></outputDirectory>
+        </fileSet>
+    </fileSets>
+</assembly>

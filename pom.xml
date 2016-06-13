@@ -57,20 +57,57 @@
                 </configuration>
             </plugin>
 
-            <!-- Build jar file that bundles dependencies and database files -->
+            <!-- Build Javadocs -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10.4</version>
+                <configuration>
+                    <outputDirectory>target/site/apidocs</outputDirectory>
+                    <sourceFileExcludes>
+                        <exclude>uk/ac/cam/cl/databases/moviedb/Import.java</exclude>
+                        <exclude>uk/ac/cam/cl/databases/moviedb/ResourceExtractor.java</exclude>
+                    </sourceFileExcludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-javadoc</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>javadoc</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>2.6</version>
-                <configuration>
-                    <descriptors>
-                        <descriptor>src/main/assembly/document-jar.xml</descriptor>
-                    </descriptors>
-                </configuration>
                 <executions>
+                    <!-- Build jar file that bundles dependencies and database files -->
                     <execution>
                         <id>make-document-jar</id>
                         <phase>package</phase>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>src/main/assembly/document-jar.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+
+                    <!-- Build zip file of javadocs -->
+                    <execution>
+                        <id>make-javadoc-zip</id>
+                        <phase>package</phase>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>src/main/assembly/javadoc-zip.xml</descriptor>
+                            </descriptors>
+                        </configuration>
                         <goals>
                             <goal>single</goal>
                         </goals>

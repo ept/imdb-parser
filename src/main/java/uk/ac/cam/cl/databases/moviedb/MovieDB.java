@@ -23,6 +23,34 @@ import com.sleepycat.je.SecondaryKeyCreator;
 import uk.ac.cam.cl.databases.moviedb.model.Movie;
 import uk.ac.cam.cl.databases.moviedb.model.Person;
 
+/**
+ * An example database using a JSON document data model, with data derived from
+ * <a href="http://www.imdb.com/interfaces">IMDb</a>. It stores two kinds of object:
+ * {@link Movie} and {@link Person}.
+ *
+ * <p>The database is embedded in-process (not a network service), and implemented using
+ * <a href="http://www.oracle.com/technetwork/database/berkeleydb/overview/index-093405.html">Berkeley
+ * DB Java Edition</a>. The records in the database are <a href="http://json.org/">JSON</a>
+ * strings, which are mapped to Java objects using <a href="https://github.com/google/gson">GSON</a>.
+ *
+ * <p>The database has two primary key indexes (looking up a person or a movie by ID), and
+ * two secondary indexes (looking up a person by name, or looking up a movie by title).
+ *
+ * <p>For convenience, MovieDB allows its data files to be packaged as resources in a JAR
+ * file on the classpath, and they are extracted to a directory when it is first run.
+ * This allows us to distribute a single JAR file containing both library dependencies and
+ * example data.
+ *
+ * <p>When you have finished using the database, you should close it using {@link #close()},
+ * which clears up any locks and pending writes, and shuts down background threads. The
+ * easiest way of doing this is with a
+ * <a href="http://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html">try-with-resources
+ * statement</a>, which takes advantage of the {@link AutoCloseable} interface:
+ *
+ * <pre>try (MovieDB database = new MovieDB(new File("document-db")) {
+ *    ... // use the database
+ *}</pre>
+ */
 public class MovieDB implements AutoCloseable {
     private static final Charset UTF8 = Charset.forName("UTF-8");
     private static final EntryBinding<Integer> intBinding = TupleBinding.getPrimitiveBinding(Integer.class);
@@ -146,6 +174,13 @@ public class MovieDB implements AutoCloseable {
 
     /**
      * Scans over a set of movies whose title begins with the specified string.
+     * See {@link Movie#getTitle()} for notes on how the title is formatted. The
+     * search is case-sensitive.
+     *
+     * <p>You need to iterate all the way to the end, because the iterator maintains
+     * a cursor in the database that is closed when the iterator has no more items
+     * remaining. Stopping iteration early would leak cursors.
+     *
      * @param titlePrefix The beginning of the title to search for.
      * @return Sequence of movies matching the search condition.
      */
@@ -159,6 +194,13 @@ public class MovieDB implements AutoCloseable {
 
     /**
      * Scans over a set of people whose name begins with the specified string.
+     * See {@link Person#getName()} for notes on how the name is formatted. The
+     * search is case-sensitive.
+     *
+     * <p>You need to iterate all the way to the end, because the iterator maintains
+     * a cursor in the database that is closed when the iterator has no more items
+     * remaining. Stopping iteration early would leak cursors.
+     *
      * @param namePrefix The beginning of the name to search for.
      * @return Sequence of people matching the search condition.
      */
@@ -172,6 +214,9 @@ public class MovieDB implements AutoCloseable {
 
     /**
      * Closes the database cleanly and shuts down its background threads.
+     * This method is called automatically if you use MovieDB in a
+     * <a href="http://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html">try-with-resources
+     * statement</a>.
      */
     @Override
     public void close() {

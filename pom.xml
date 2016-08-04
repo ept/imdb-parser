@@ -12,6 +12,7 @@
         <movies.json.path>${project.basedir}/movies_doc.json.gz</movies.json.path>
         <people.json.path>${project.basedir}/people_doc.json.gz</people.json.path>
         <document.db.path>${project.basedir}/document-db</document.db.path>
+        <relational.db.path>${project.basedir}/relational-db</relational.db.path>
     </properties>
 
     <groupId>uk.ac.cam.cl.databases.moviedb</groupId>
@@ -34,6 +35,25 @@
             <groupId>com.sleepycat</groupId>
             <artifactId>je</artifactId>
             <version>5.0.73</version>
+        </dependency>
+
+        <!-- HyperSQL database: http://hsqldb.org/ -->
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>2.3.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>sqltool</artifactId>
+            <version>2.3.4</version>
+        </dependency>
+
+        <!-- Postgres JDBC driver (for importing from Postgres to HyperSQL) -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>9.4.1208</version>
         </dependency>
 
         <!-- Load dependencies from classpath: https://sites.google.com/site/javacornproject/corn-cps -->
@@ -81,7 +101,9 @@
                     <outputDirectory>target/site/apidocs</outputDirectory>
                     <sourceFileExcludes>
                         <exclude>uk/ac/cam/cl/databases/moviedb/Import.java</exclude>
+                        <exclude>uk/ac/cam/cl/databases/moviedb/ImportRelational.java</exclude>
                         <exclude>uk/ac/cam/cl/databases/moviedb/ResourceExtractor.java</exclude>
+                        <exclude>uk/ac/cam/cl/databases/moviedb/RelationalUI.java</exclude>
                     </sourceFileExcludes>
                 </configuration>
                 <executions>
@@ -100,7 +122,7 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>2.6</version>
                 <executions>
-                    <!-- Build jar file that bundles dependencies and database files -->
+                    <!-- Build jar file that bundles document database files and dependencies -->
                     <execution>
                         <id>make-document-jar</id>
                         <phase>package</phase>
@@ -108,6 +130,25 @@
                             <descriptors>
                                 <descriptor>src/main/assembly/document-jar.xml</descriptor>
                             </descriptors>
+                        </configuration>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+
+                    <!-- Build jar file that bundles relational database files and dependencies -->
+                    <execution>
+                        <id>make-relational-jar</id>
+                        <phase>package</phase>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>src/main/assembly/relational-jar.xml</descriptor>
+                            </descriptors>
+                            <archive>
+                                <manifest>
+                                    <mainClass>uk.ac.cam.cl.databases.moviedb.RelationalUI</mainClass>
+                                </manifest>
+                            </archive>
                         </configuration>
                         <goals>
                             <goal>single</goal>
@@ -135,7 +176,7 @@
     <!-- If the document-db directory does not exist, run the import tool to create it -->
     <profiles>
         <profile>
-            <id>import-database</id>
+            <id>import-document-db</id>
             <activation>
                 <file>
                     <missing>document-db</missing>
@@ -149,7 +190,7 @@
                         <version>1.2.1</version>
                         <executions>
                             <execution>
-                                <id>run-import</id>
+                                <id>run-import-document-db</id>
                                 <phase>generate-resources</phase>
                                 <goals>
                                     <goal>java</goal>
@@ -160,6 +201,40 @@
                                         <argument>${movies.json.path}</argument>
                                         <argument>${people.json.path}</argument>
                                         <argument>${document.db.path}</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!-- If the document-db directory does not exist, run the import tool to create it -->
+        <profile>
+            <id>import-relational-db</id>
+            <activation>
+                <file>
+                    <missing>relational-db</missing>
+                </file>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.2.1</version>
+                        <executions>
+                            <execution>
+                                <id>run-import-relational-db</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>java</goal>
+                                </goals>
+                                <configuration>
+                                    <mainClass>uk.ac.cam.cl.databases.moviedb.ImportRelational</mainClass>
+                                    <arguments>
+                                        <argument>${relational.db.path}</argument>
                                     </arguments>
                                 </configuration>
                             </execution>

@@ -2,6 +2,7 @@
 /.project
 /.settings/
 /document-db/
+/relational-db/
 /movies_doc.json.gz
 /people_doc.json.gz
 /target/

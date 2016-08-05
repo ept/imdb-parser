@@ -75,7 +75,7 @@ public class ImportRelational {
         try (PreparedStatement insert = hsql.prepareStatement("INSERT INTO movies (id, title, year) values(?, ?, ?)");
                 Statement select = pg.createStatement()) {
             ResultSet results = select.executeQuery(
-                "SELECT id, title, properties->'year' FROM movies WHERE " + MOVIES_RESTRICTION);
+                "SELECT id, title, properties->>'year' FROM movies WHERE " + MOVIES_RESTRICTION);
             while (results.next()) {
                 copyRow(results, insert, INTEGER, VARCHAR, INTEGER);
             }
@@ -95,7 +95,7 @@ public class ImportRelational {
         try (PreparedStatement insert = hsql.prepareStatement("INSERT INTO people (id, name, gender) values(?, ?, ?)");
                 Statement select = pg.createStatement()) {
             ResultSet results = select.executeQuery(
-                "SELECT id, name, properties->'gender' FROM people JOIN (" +
+                "SELECT id, name, properties->>'gender' FROM people JOIN (" +
                 "SELECT person_id, count(*) AS num_credits " +
                 "FROM credits JOIN movies ON movies.id = movie_id " +
                 "WHERE " + CREDITS_RESTRICTION + " AND " + MOVIES_RESTRICTION + " " +

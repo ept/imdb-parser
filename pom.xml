@@ -191,7 +191,7 @@
                         <executions>
                             <execution>
                                 <id>run-import-document-db</id>
-                                <phase>generate-resources</phase>
+                                <phase>process-classes</phase>
                                 <goals>
                                     <goal>java</goal>
                                 </goals>
@@ -227,7 +227,7 @@
                         <executions>
                             <execution>
                                 <id>run-import-relational-db</id>
-                                <phase>generate-resources</phase>
+                                <phase>process-classes</phase>
                                 <goals>
                                     <goal>java</goal>
                                 </goals>

@@ -29,7 +29,7 @@ public class Movie {
     private List<ColorInfo> colorInfo;
     private List<String> genres;
     private List<String> keywords;
-    private List<Language> language;
+    private List<Language> languages;
     private List<Location> locations;
     private Map<String, List<ReleaseDate>> releaseDates;
     private List<RunningTime> runningTimes;
@@ -326,16 +326,16 @@ public class Movie {
      * Gets the list of <a href="https://contribute.imdb.com/updates/guide/language">languages
      * spoken in this movie</a>.
      */
-    public List<Language> getLanguage() {
-        return language;
+    public List<Language> getLanguages() {
+        return languages;
     }
 
     /**
      * Sets the list of <a href="https://contribute.imdb.com/updates/guide/language">languages
      * spoken in this movie</a>.
      */
-    public void setLanguage(List<Language> language) {
-        this.language = language;
+    public void setLanguage(List<Language> languages) {
+        this.languages = languages;
     }
 
     /**

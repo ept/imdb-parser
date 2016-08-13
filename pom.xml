@@ -101,6 +101,7 @@
                     <outputDirectory>target/site/apidocs</outputDirectory>
                     <sourceFileExcludes>
                         <exclude>uk/ac/cam/cl/databases/moviedb/Import.java</exclude>
+                        <exclude>uk/ac/cam/cl/databases/moviedb/ImportDocument.java</exclude>
                         <exclude>uk/ac/cam/cl/databases/moviedb/ImportRelational.java</exclude>
                         <exclude>uk/ac/cam/cl/databases/moviedb/ResourceExtractor.java</exclude>
                         <exclude>uk/ac/cam/cl/databases/moviedb/RelationalUI.java</exclude>

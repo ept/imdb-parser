@@ -17,13 +17,6 @@ public class Certificate {
     }
 
     /**
-     * Sets the country in which the certificate applies.
-     */
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    /**
      * Gets the country-specific code for the certificate, for example
      * <tt>"PG"</tt> for the "Parental Guidance" category in the UK.
      */
@@ -32,26 +25,11 @@ public class Certificate {
     }
 
     /**
-     * Sets the country-specific code for the certificate.
-     */
-    public void setCertificate(String certificate) {
-        this.certificate = certificate;
-    }
-
-    /**
      * Gets an informational attribute about the certificate, for example
      * to describe which version of a movie the certificate applies to.
      */
     public String getNote() {
         return note;
-    }
-
-    /**
-     * Sets an informational attribute about the certificate, for example
-     * to describe which version of a movie the certificate applies to.
-     */
-    public void setNote(String note) {
-        this.note = note;
     }
 
     /**

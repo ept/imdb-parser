@@ -16,26 +16,11 @@ public class Language {
     }
 
     /**
-     * Sets the name of the language, for example <tt>"English"</tt>.
-     */
-    public void setLanguage(String language) {
-        this.language = language;
-    }
-
-    /**
      * Gets an informational attribute, for example stating in which context
      * the language is used.
      */
     public String getNote() {
         return note;
-    }
-
-    /**
-     * Sets an informational attribute, for example stating in which context
-     * the language is used.
-     */
-    public void setNote(String note) {
-        this.note = note;
     }
 
     /**

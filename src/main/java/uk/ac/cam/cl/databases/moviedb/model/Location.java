@@ -16,26 +16,11 @@ public class Location {
     }
 
     /**
-     * Sets the name and place (such as city, region, country) of the location.
-     */
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    /**
      * Gets an informational attribute, for example stating which parts of the
      * movie are shot in this location.
      */
     public String getNote() {
         return note;
-    }
-
-    /**
-     * Sets an informational attribute, for example stating which parts of the
-     * movie are shot in this location.
-     */
-    public void setNote(String note) {
-        this.note = note;
     }
 
     /**

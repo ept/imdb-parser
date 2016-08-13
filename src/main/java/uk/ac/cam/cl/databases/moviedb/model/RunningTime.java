@@ -20,26 +20,11 @@ public class RunningTime {
     }
 
     /**
-     * Sets the running time in minutes.
-     */
-    public void setRunningTime(String runningTime) {
-        this.runningTime = runningTime;
-    }
-
-    /**
      * Gets an informational attribute about the running time, for example describing
      * which version of the movie it applies to.
      */
     public String getNote() {
         return note;
-    }
-
-    /**
-     * Sets an informational attribute about the running time, for example describing
-     * which version of the movie it applies to.
-     */
-    public void setNote(String note) {
-        this.note = note;
     }
 
     /**

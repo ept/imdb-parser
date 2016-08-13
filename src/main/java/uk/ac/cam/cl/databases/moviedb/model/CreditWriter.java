@@ -17,27 +17,24 @@ package uk.ac.cam.cl.databases.moviedb.model;
 public class CreditWriter extends CreditPerson {
     private Integer lineOrder, groupOrder, subgroupOrder;
 
+    /**
+     * Gets the first part of the order triple.
+     */
     public Integer getLineOrder() {
         return lineOrder;
     }
 
-    public void setLineOrder(Integer lineOrder) {
-        this.lineOrder = lineOrder;
-    }
-
+    /**
+     * Gets the second part of the order triple.
+     */
     public Integer getGroupOrder() {
         return groupOrder;
     }
 
-    public void setGroupOrder(Integer groupOrder) {
-        this.groupOrder = groupOrder;
-    }
-
+    /**
+     * Gets the third part of the order triple.
+     */
     public Integer getSubgroupOrder() {
         return subgroupOrder;
-    }
-
-    public void setSubgroupOrder(Integer subgroupOrder) {
-        this.subgroupOrder = subgroupOrder;
     }
 }

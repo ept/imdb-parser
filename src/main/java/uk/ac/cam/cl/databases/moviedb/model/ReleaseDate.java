@@ -21,26 +21,12 @@ public class ReleaseDate {
     }
 
     /**
-     * Sets the date on which the movie was released.
-     */
-    public void setReleaseDate(String releaseDate) {
-        this.releaseDate = releaseDate;
-    }
-
-    /**
      * Gets an informational attribute about the movie release. For example, there may be
      * multiple release dates for the same country due to a premiere or film festival,
      * or differences between regions. This note field is used to distinguish those dates.
      */
     public String getNote() {
         return note;
-    }
-
-    /**
-     * Sets an informational attribute about the movie release.
-     */
-    public void setNote(String note) {
-        this.note = note;
     }
 
     /**

@@ -24,14 +24,6 @@ public class CreditActor extends CreditPerson {
     }
 
     /**
-     * Sets the <a href="https://contribute.imdb.com/updates/guide/characters">name of
-     * the character</a> that this person played in this movie.
-     */
-    public void setCharacter(String character) {
-        this.character = character;
-    }
-
-    /**
      * Gets the <a href="https://contribute.imdb.com/updates/guide/cast#castorders">position
      * of this actor in the cast order for the movie</a>. For example, the actor who is
      * listed first in the credits has a position of 1, the actor who is listed second has 2,
@@ -39,13 +31,5 @@ public class CreditActor extends CreditPerson {
      */
     public Integer getPosition() {
         return position;
-    }
-
-    /**
-     * Sets the <a href="https://contribute.imdb.com/updates/guide/cast#castorders">position
-     * of this actor in the cast order for the movie</a>.
-     */
-    public void setPosition(Integer position) {
-        this.position = position;
     }
 }

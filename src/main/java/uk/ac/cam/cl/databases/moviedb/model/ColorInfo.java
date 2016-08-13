@@ -15,26 +15,11 @@ public class ColorInfo {
     }
 
     /**
-     * Either <tt>"Color"</tt> or <tt>"Black and White"</tt>.
-     */
-    public void setColorInfo(String colorInfo) {
-        this.colorInfo = colorInfo;
-    }
-
-    /**
      * Gets an informational attribute about the colour information, for example
      * a note about the process used, such as Technicolor.
      */
     public String getNote() {
         return note;
-    }
-
-    /**
-     * Sets an informational attribute about the colour information, for example
-     * a note about the process used, such as Technicolor.
-     */
-    public void setNote(String note) {
-        this.note = note;
     }
 
     /**

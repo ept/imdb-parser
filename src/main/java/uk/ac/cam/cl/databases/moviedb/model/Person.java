@@ -47,14 +47,6 @@ public class Person {
     }
 
     /**
-     * Sets the unique numerical ID of this person. This ID is only meaningful within
-     * this example database; it does not correspond to the ID on the IMDb website.
-     */
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    /**
      * Gets the <a href="https://contribute.imdb.com/updates/guide/names_all">name of this
      * person, usually in the form "surname, firstname"</a>. If there are several people
      * with the same name in the database, the name is followed by a roman numeral in
@@ -63,15 +55,6 @@ public class Person {
      */
     public String getName() {
         return name;
-    }
-
-    /**
-     * Sets the <a href="https://contribute.imdb.com/updates/guide/names_all">name of this
-     * person, usually in the form "surname, firstname"</a>. See {@link #getName()} for
-     * details.
-     */
-    public void setName(String name) {
-        this.name = name;
     }
 
     /**
@@ -87,28 +70,12 @@ public class Person {
     }
 
     /**
-     * Sets the <a href="https://contribute.imdb.com/updates/guide/cast#gender">gender of
-     * this person</a>.
-     */
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    /**
      * If this person is an actor or actress, gets the list of movies
      * <a href="https://contribute.imdb.com/updates/guide/cast">in which they played a
      * role</a>, sorted by year. <tt>null</tt> if this person is not an actor.
      */
     public List<Role> getActorIn() {
         return actorIn;
-    }
-
-    /**
-     * Sets the list of movies <a href="https://contribute.imdb.com/updates/guide/cast">in
-     * which this person played a role</a>.
-     */
-    public void setActorIn(List<Role> actorIn) {
-        this.actorIn = actorIn;
     }
 
     /**
@@ -121,30 +88,12 @@ public class Person {
     }
 
     /**
-     * Sets the list of movies in which this person worked as
-     * <a href="https://contribute.imdb.com/updates/guide/cinematographers">cinematographer
-     * or director of photography</a>.
-     */
-    public void setCinematographerIn(List<BiographyItem> cinematographerIn) {
-        this.cinematographerIn = cinematographerIn;
-    }
-
-    /**
      * If this person is a composer, gets the
      * <a href="https://contribute.imdb.com/updates/guide/composers">list of movies on which
      * they composed the main background score</a>, sorted by year. Otherwise returns <tt>null</tt>.
      */
     public List<BiographyItem> getComposerIn() {
         return composerIn;
-    }
-
-    /**
-     * Sets the list of movies for which this person
-     * <a href="https://contribute.imdb.com/updates/guide/composers">composed the main
-     * background score</a>.
-     */
-    public void setComposerIn(List<BiographyItem> composerIn) {
-        this.composerIn = composerIn;
     }
 
     /**
@@ -157,28 +106,12 @@ public class Person {
     }
 
     /**
-     * Sets the list of movies in which this person worked as
-     * <a href="https://contribute.imdb.com/updates/guide/costume_designers">costume designer</a>.
-     */
-    public void setCostumeDesignerIn(List<BiographyItem> costumeDesignerIn) {
-        this.costumeDesignerIn = costumeDesignerIn;
-    }
-
-    /**
      * If this person is a director, gets the
      * <a href="https://contribute.imdb.com/updates/guide/directors">list of movies they
      * directed</a>, sorted by year. Otherwise returns <tt>null</tt>.
      */
     public List<BiographyItem> getDirectorIn() {
         return directorIn;
-    }
-
-    /**
-     * Sets the list of movies that this person
-     * <a href="https://contribute.imdb.com/updates/guide/directors">directed</a>.
-     */
-    public void setDirectorIn(List<BiographyItem> directorIn) {
-        this.directorIn = directorIn;
     }
 
     /**
@@ -191,28 +124,12 @@ public class Person {
     }
 
     /**
-     * Sets the list of movies on which this person worked as
-     * <a href="https://contribute.imdb.com/updates/guide/editors">picture editor</a>.
-     */
-    public void setEditorIn(List<BiographyItem> editorIn) {
-        this.editorIn = editorIn;
-    }
-
-    /**
      * If this person is a <a href="https://contribute.imdb.com/updates/guide/producers">producer
      * (including executive producer, line producer, etc.)</a>, gets the list of movies that they
      * produced, sorted by year. Otherwise returns <tt>null</tt>.
      */
     public List<BiographyItem> getProducerIn() {
         return producerIn;
-    }
-
-    /**
-     * Sets the list of movies on which this person worked as
-     * <a href="https://contribute.imdb.com/updates/guide/producers">producer</a>.
-     */
-    public void setProducerIn(List<BiographyItem> producerIn) {
-        this.producerIn = producerIn;
     }
 
     /**
@@ -225,28 +142,11 @@ public class Person {
     }
 
     /**
-     * Sets the list of movies on which this person worked as
-     * <a href="https://contribute.imdb.com/updates/guide/production_designers">production designer</a>.
-     */
-    public void setProductionDesignerIn(List<BiographyItem> productionDesignerIn) {
-        this.productionDesignerIn = productionDesignerIn;
-    }
-
-    /**
      * If this person is a <a href="https://contribute.imdb.com/updates/guide/writers">screenplay
      * or story writer</a>, gets a list of movies that they wrote, sorted by year.
      * Otherwise returns <tt>null</tt>.
      */
     public List<ScriptWriter> getWriterIn() {
         return writerIn;
-    }
-
-    /**
-     * Sets the list of movies on which this person worked as
-     * <a href="https://contribute.imdb.com/updates/guide/writers">screenplay
-     * or story writer</a>.
-     */
-    public void setWriterIn(List<ScriptWriter> writerIn) {
-        this.writerIn = writerIn;
     }
 }

@@ -36,27 +36,11 @@ public class BiographyItem {
     }
 
     /**
-     * Sets the unique numerical ID of the movie on which the person worked.
-     * See {@link Movie#getId()} for more information about IDs.
-     */
-    public void setMovieId(int movieId) {
-        this.movieId = movieId;
-    }
-
-    /**
      * Gets the title of the movie on which the person worked. See
      * {@link Movie#getTitle()} for more information about titles.
      */
     public String getTitle() {
         return title;
-    }
-
-    /**
-     * Sets the title of the movie on which the person worked. See
-     * {@link Movie#getTitle()} for more information about titles.
-     */
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     /**
@@ -66,15 +50,6 @@ public class BiographyItem {
      */
     public String getInfo() {
         return info;
-    }
-
-    /**
-     * Sets the <a href="https://contribute.imdb.com/updates/guide/attributes">informational
-     * attribute</a> about the job that this person did on this movie, or about how they were
-     * credited.
-     */
-    public void setInfo(String info) {
-        this.info = info;
     }
 
     /**

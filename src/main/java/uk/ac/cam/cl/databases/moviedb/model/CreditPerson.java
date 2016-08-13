@@ -34,27 +34,11 @@ public class CreditPerson {
     }
 
     /**
-     * Sets the unique numerical ID of the person who worked on this movie.
-     * See {@link Person#getId()} for more information about IDs.
-     */
-    public void setPersonId(int personId) {
-        this.personId = personId;
-    }
-
-    /**
      * Gets the name of the person who worked on this movie.
      * See {@link Person#getName()} for more information about names.
      */
     public String getName() {
         return name;
-    }
-
-    /**
-     * Sets the name of the person who worked on this movie.
-     * See {@link Person#getName()} for more information about names.
-     */
-    public void setName(String name) {
-        this.name = name;
     }
 
     /**
@@ -64,15 +48,6 @@ public class CreditPerson {
      */
     public String getInfo() {
         return info;
-    }
-
-    /**
-     * Sets the <a href="https://contribute.imdb.com/updates/guide/attributes">informational
-     * attribute</a> about the job that this person did on this movie, or about how they were
-     * credited.
-     */
-    public void setInfo(String info) {
-        this.info = info;
     }
 
     /**

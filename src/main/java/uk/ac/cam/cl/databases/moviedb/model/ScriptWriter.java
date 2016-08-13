@@ -25,13 +25,6 @@ public class ScriptWriter extends BiographyItem {
     }
 
     /**
-     * Sets the first part of the order triple.
-     */
-    public void setLineOrder(Integer lineOrder) {
-        this.lineOrder = lineOrder;
-    }
-
-    /**
      * Gets the second part of the order triple.
      */
     public Integer getGroupOrder() {
@@ -39,23 +32,9 @@ public class ScriptWriter extends BiographyItem {
     }
 
     /**
-     * Sets the second part of the order triple.
-     */
-    public void setGroupOrder(Integer groupOrder) {
-        this.groupOrder = groupOrder;
-    }
-
-    /**
      * Gets the third part of the order triple.
      */
     public Integer getSubgroupOrder() {
         return subgroupOrder;
-    }
-
-    /**
-     * Sets the third part of the order triple.
-     */
-    public void setSubgroupOrder(Integer subgroupOrder) {
-        this.subgroupOrder = subgroupOrder;
     }
 }

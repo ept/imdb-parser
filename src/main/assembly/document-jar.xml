@@ -27,7 +27,7 @@
 
     <fileSets>
         <fileSet>
-            <directory>document-db</directory>
+            <directory>document-small</directory>
             <outputDirectory>resources/document-db</outputDirectory>
         </fileSet>
     </fileSets>

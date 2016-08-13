@@ -9,10 +9,10 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <movies.json.path>${project.basedir}/movies_doc.json.gz</movies.json.path>
-        <people.json.path>${project.basedir}/people_doc.json.gz</people.json.path>
-        <document.db.path>${project.basedir}/document-db</document.db.path>
-        <relational.db.path>${project.basedir}/relational-db</relational.db.path>
+        <document.large.path>${project.basedir}/document-large</document.large.path>
+        <document.small.path>${project.basedir}/document-small</document.small.path>
+        <relational.large.path>${project.basedir}/relational-large</relational.large.path>
+        <relational.small.path>${project.basedir}/relational-small</relational.small.path>
     </properties>
 
     <groupId>uk.ac.cam.cl.databases.moviedb</groupId>
@@ -173,13 +173,13 @@
         </plugins>
     </build>
 
-    <!-- If the document-db directory does not exist, run the import tool to create it -->
     <profiles>
+        <!-- If the document-large directory does not exist, run the import tool to create it -->
         <profile>
-            <id>import-document-db</id>
+            <id>import-document-large</id>
             <activation>
                 <file>
-                    <missing>document-db</missing>
+                    <missing>document-large</missing>
                 </file>
             </activation>
             <build>
@@ -190,7 +190,7 @@
                         <version>1.2.1</version>
                         <executions>
                             <execution>
-                                <id>run-import-document-db</id>
+                                <id>run-import-document-large</id>
                                 <phase>process-classes</phase>
                                 <goals>
                                     <goal>java</goal>
@@ -198,9 +198,9 @@
                                 <configuration>
                                     <mainClass>uk.ac.cam.cl.databases.moviedb.Import</mainClass>
                                     <arguments>
-                                        <argument>${movies.json.path}</argument>
-                                        <argument>${people.json.path}</argument>
-                                        <argument>${document.db.path}</argument>
+                                        <argument>${project.basedir}/movies_doc.json.gz</argument>
+                                        <argument>${project.basedir}/people_doc.json.gz</argument>
+                                        <argument>${document.large.path}</argument>
                                     </arguments>
                                 </configuration>
                             </execution>
@@ -210,12 +210,12 @@
             </build>
         </profile>
 
-        <!-- If the document-db directory does not exist, run the import tool to create it -->
+        <!-- If the document-small directory does not exist, run the import tool to create it -->
         <profile>
-            <id>import-relational-db</id>
+            <id>import-document-small</id>
             <activation>
                 <file>
-                    <missing>relational-db</missing>
+                    <missing>document-small</missing>
                 </file>
             </activation>
             <build>
@@ -226,7 +226,43 @@
                         <version>1.2.1</version>
                         <executions>
                             <execution>
-                                <id>run-import-relational-db</id>
+                                <id>run-import-document-small</id>
+                                <phase>process-classes</phase>
+                                <goals>
+                                    <goal>java</goal>
+                                </goals>
+                                <configuration>
+                                    <mainClass>uk.ac.cam.cl.databases.moviedb.Import</mainClass>
+                                    <arguments>
+                                        <argument>${project.basedir}/movies_doc_small.json.gz</argument>
+                                        <argument>${project.basedir}/people_doc_small.json.gz</argument>
+                                        <argument>${document.small.path}</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!-- If the relational-large directory does not exist, run the import tool to create it -->
+        <profile>
+            <id>import-relational-large</id>
+            <activation>
+                <file>
+                    <missing>relational-large</missing>
+                </file>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.2.1</version>
+                        <executions>
+                            <execution>
+                                <id>run-import-relational-large</id>
                                 <phase>process-classes</phase>
                                 <goals>
                                     <goal>java</goal>
@@ -234,7 +270,43 @@
                                 <configuration>
                                     <mainClass>uk.ac.cam.cl.databases.moviedb.ImportRelational</mainClass>
                                     <arguments>
-                                        <argument>${relational.db.path}</argument>
+                                        <argument>--large</argument>
+                                        <argument>${relational.large.path}</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!-- If the relational-small directory does not exist, run the import tool to create it -->
+        <profile>
+            <id>import-relational-small</id>
+            <activation>
+                <file>
+                    <missing>relational-small</missing>
+                </file>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.2.1</version>
+                        <executions>
+                            <execution>
+                                <id>run-import-relational-small</id>
+                                <phase>process-classes</phase>
+                                <goals>
+                                    <goal>java</goal>
+                                </goals>
+                                <configuration>
+                                    <mainClass>uk.ac.cam.cl.databases.moviedb.ImportRelational</mainClass>
+                                    <arguments>
+                                        <argument>--small</argument>
+                                        <argument>${relational.small.path}</argument>
                                     </arguments>
                                 </configuration>
                             </execution>

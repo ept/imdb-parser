@@ -32,20 +32,19 @@ import static java.sql.Types.*;
  * table whose contents are recorded in a SQL script file.<p>
  */
 public class ImportRelational {
-    /** SQL WHERE clause to restrict movies we want to include in the database */
-    public static final String MOVIES_RESTRICTION =
-            "movies.series_id IS NULL AND " +
-            "NOT movies.is_series AND " +
-            "movies.properties->>'suspended' IS NULL AND " +
-            "movies.title ~ '\\(\\d{4}[^\\)]*\\)$'";
-
-    public static final String CREDITS_RESTRICTION = "credits.type <> 'miscellaneous'";
-
     private final Connection hsql, pg;
+    private final String moviesTable, peopleTable;
 
-    public ImportRelational(Connection hsql, Connection pg) {
+    public ImportRelational(Connection hsql, Connection pg, boolean onlyTopTitles) {
         this.hsql = hsql;
         this.pg = pg;
+        if (onlyTopTitles) {
+            this.moviesTable = "movies_doc_small";
+            this.peopleTable = "people_doc_small";
+        } else {
+            this.moviesTable = "movies_doc";
+            this.peopleTable = "people_doc";
+        }
     }
 
     public void run() throws SQLException {
@@ -75,7 +74,7 @@ public class ImportRelational {
         try (PreparedStatement insert = hsql.prepareStatement("INSERT INTO movies (id, title, year) values(?, ?, ?)");
                 Statement select = pg.createStatement()) {
             ResultSet results = select.executeQuery(
-                "SELECT id, title, properties->>'year' FROM movies WHERE " + MOVIES_RESTRICTION);
+                "SELECT properties->>'id', properties->>'title', properties->>'year' FROM " + moviesTable);
             while (results.next()) {
                 copyRow(results, insert, INTEGER, VARCHAR, INTEGER);
             }
@@ -95,12 +94,7 @@ public class ImportRelational {
         try (PreparedStatement insert = hsql.prepareStatement("INSERT INTO people (id, name, gender) values(?, ?, ?)");
                 Statement select = pg.createStatement()) {
             ResultSet results = select.executeQuery(
-                "SELECT id, name, properties->>'gender' FROM people JOIN (" +
-                "SELECT person_id, count(*) AS num_credits " +
-                "FROM credits JOIN movies ON movies.id = movie_id " +
-                "WHERE " + CREDITS_RESTRICTION + " AND " + MOVIES_RESTRICTION + " " +
-                "GROUP BY person_id) credits2 " +
-                "ON credits2.person_id = people.id WHERE num_credits > 0");
+                "SELECT properties->>'id', properties->>'name', properties->>'gender' FROM " + peopleTable);
             while (results.next()) {
                 copyRow(results, insert, INTEGER, VARCHAR, VARCHAR);
             }
@@ -133,8 +127,7 @@ public class ImportRelational {
                 "credits.properties->>'line_order', " +
                 "credits.properties->>'group_order', " +
                 "credits.properties->>'subgroup_order' " +
-                "FROM credits JOIN movies ON movies.id = movie_id " +
-                "WHERE " + CREDITS_RESTRICTION + " AND " + MOVIES_RESTRICTION);
+                "FROM credits JOIN " + moviesTable + " ON (" + moviesTable + ".properties->>'id')::integer = movie_id");
             while (results.next()) {
                 copyRow(results, insert, INTEGER, INTEGER, VARCHAR, VARCHAR, VARCHAR, INTEGER, INTEGER, INTEGER, INTEGER);
             }
@@ -159,7 +152,7 @@ public class ImportRelational {
                 Statement select = pg.createStatement()) {
             ResultSet results = select.executeQuery(
                 "SELECT properties->>'id', cert->>'country', cert->>'certificate', cert->>'note' " +
-                "FROM movies_doc, jsonb_array_elements(properties->'certificates') AS cert");
+                "FROM " + moviesTable + ", jsonb_array_elements(properties->'certificates') AS cert");
             while (results.next()) {
                 copyRow(results, insert, INTEGER, VARCHAR, VARCHAR, VARCHAR);
             }
@@ -181,7 +174,7 @@ public class ImportRelational {
                 Statement select = pg.createStatement()) {
             ResultSet results = select.executeQuery(
                 "SELECT properties->>'id', color->>'color_info', color->>'note' " +
-                "FROM movies_doc, jsonb_array_elements(properties->'color_info') AS color");
+                "FROM " + moviesTable + ", jsonb_array_elements(properties->'color_info') AS color");
             while (results.next()) {
                 copyRow(results, insert, INTEGER, VARCHAR, VARCHAR);
             }
@@ -202,7 +195,7 @@ public class ImportRelational {
                 Statement select = pg.createStatement()) {
             ResultSet results = select.executeQuery(
                 "SELECT properties->>'id' AS movie_id, " +
-                "jsonb_array_elements_text(properties->'genres') FROM movies_doc");
+                "jsonb_array_elements_text(properties->'genres') FROM " + moviesTable);
             while (results.next()) {
                 copyRow(results, insert, INTEGER, VARCHAR);
             }
@@ -223,7 +216,7 @@ public class ImportRelational {
                 Statement select = pg.createStatement()) {
             ResultSet results = select.executeQuery(
                 "SELECT properties->>'id' AS movie_id, " +
-                "jsonb_array_elements_text(properties->'keywords') FROM movies_doc");
+                "jsonb_array_elements_text(properties->'keywords') FROM " + moviesTable);
             while (results.next()) {
                 copyRow(results, insert, INTEGER, VARCHAR);
             }
@@ -245,7 +238,7 @@ public class ImportRelational {
                 Statement select = pg.createStatement()) {
             ResultSet results = select.executeQuery(
                 "SELECT properties->>'id', language->>'language', language->>'note' " +
-                "FROM movies_doc, jsonb_array_elements(properties->'language') AS language");
+                "FROM " + moviesTable + ", jsonb_array_elements(properties->'language') AS language");
             while (results.next()) {
                 copyRow(results, insert, INTEGER, VARCHAR, VARCHAR);
             }
@@ -267,7 +260,7 @@ public class ImportRelational {
                 Statement select = pg.createStatement()) {
             ResultSet results = select.executeQuery(
                 "SELECT properties->>'id', location->>'location', location->>'note' " +
-                "FROM movies_doc, jsonb_array_elements(properties->'locations') AS location");
+                "FROM " + moviesTable + ", jsonb_array_elements(properties->'locations') AS location");
             while (results.next()) {
                 copyRow(results, insert, INTEGER, VARCHAR, VARCHAR);
             }
@@ -293,7 +286,7 @@ public class ImportRelational {
                 "SELECT movie_id, country, jsonb_array_elements(dates) AS date FROM (" +
                 "SELECT properties->>'id' AS movie_id, " +
                 "by_country.key AS country, by_country.value AS dates " +
-                "FROM movies_doc, jsonb_each(properties->'release_dates') AS by_country" +
+                "FROM " + moviesTable + ", jsonb_each(properties->'release_dates') AS by_country" +
                 ") reldates) reldates2");
             while (results.next()) {
                 copyRow(results, insert, INTEGER, VARCHAR, VARCHAR, VARCHAR);
@@ -316,7 +309,7 @@ public class ImportRelational {
                 Statement select = pg.createStatement()) {
             ResultSet results = select.executeQuery(
                 "SELECT properties->>'id', rtime->>'running_time', rtime->>'note' " +
-                "FROM movies_doc, jsonb_array_elements(properties->'running_times') AS rtime");
+                "FROM " + moviesTable + ", jsonb_array_elements(properties->'running_times') AS rtime");
             while (results.next()) {
                 copyRow(results, insert, INTEGER, VARCHAR, VARCHAR);
             }
@@ -357,17 +350,17 @@ public class ImportRelational {
     }
 
     public static void main(String[] args) throws Exception {
-        if (args.length != 1) {
-            System.err.println("Usage: ImportRelational output-dir");
+        if (args.length != 2 || !(args[0].equals("--large") || args[0].equals("--small"))) {
+            System.err.println("Usage: ImportRelational [--large|--small] output-dir");
             System.exit(1);
         }
-        File dbPath = new File(args[0], "moviedb");
+        File dbPath = new File(args[1], "moviedb");
         Class.forName("org.hsqldb.jdbc.JDBCDriver");
         Class.forName("org.postgresql.Driver");
         // add ;ifexists=true to prevent auto-creation
         try (Connection hsql = DriverManager.getConnection("jdbc:hsqldb:file:" + dbPath + ";shutdown=true");
                 Connection pg = DriverManager.getConnection("jdbc:postgresql:")) {
-            new ImportRelational(hsql, pg).run();
+            new ImportRelational(hsql, pg, args[0].equals("--small")).run();
         }
     }
 }

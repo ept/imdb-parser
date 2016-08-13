@@ -26,7 +26,7 @@
 
     <fileSets>
         <fileSet>
-            <directory>relational-db</directory>
+            <directory>relational-small</directory>
             <outputDirectory>resources/relational-db</outputDirectory>
         </fileSet>
     </fileSets>

@@ -22,24 +22,17 @@ public class Movie {
     private List<CreditPerson> costumeDesigners;
     private List<CreditPerson> directors;
     private List<CreditPerson> editors;
-    private List<CreditPerson> miscellaneous;
     private List<CreditPerson> producers;
     private List<CreditPerson> productionDesigners;
     private List<CreditWriter> writers;
     private List<Certificate> certificates;
     private List<ColorInfo> colorInfo;
-    private List<String> countries;
-    private List<Company> distributors;
     private List<String> genres;
     private List<String> keywords;
     private List<Language> language;
     private List<Location> locations;
-    private List<Company> prodCompanies;
     private Map<String, List<ReleaseDate>> releaseDates;
     private List<RunningTime> runningTimes;
-    private List<GeneralInfo> soundMix;
-    private List<Company> sfxCompanies;
-    private Map<String, List<GeneralInfo>> technical;
 
     static final Gson JSON_CODEC = new GsonBuilder()
             .setPrettyPrinting()
@@ -212,22 +205,6 @@ public class Movie {
     }
 
     /**
-     * Gets the list of crew members who are credited for miscellaneous reasons on this movie
-     * (i.e. not as actor, director, producer, designer, etc).
-     */
-    public List<CreditPerson> getMiscellaneous() {
-        return miscellaneous;
-    }
-
-    /**
-     * Sets the list of crew members who are credited for miscellaneous reasons on this movie
-     * (i.e. not as actor, director, producer, designer, etc).
-     */
-    public void setMiscellaneous(List<CreditPerson> miscellaneous) {
-        this.miscellaneous = miscellaneous;
-    }
-
-    /**
      * Gets the list of <a href="https://contribute.imdb.com/updates/guide/producers">people
      * who are credited as producer</a> of this movie. This includes executive producer, line
      * producer, etc.
@@ -312,40 +289,6 @@ public class Movie {
     }
 
     /**
-     * Gets the list of <a href="https://contribute.imdb.com/updates/guide/countries">countries
-     * in which the production companies for the movie are based</a>. This is not the same as
-     * the list of locations in which it was shot (see {@link #getLocations()}).
-     */
-    public List<String> getCountries() {
-        return countries;
-    }
-
-    /**
-     * Sets the list of <a href="https://contribute.imdb.com/updates/guide/countries">countries
-     * in which the production companies for the movie are based</a>. This is not the same as
-     * the list of locations in which it was shot (see {@link #setLocations(List)}).
-     */
-    public void setCountries(List<String> countries) {
-        this.countries = countries;
-    }
-
-    /**
-     * Gets the list of <a href="https://contribute.imdb.com/updates/guide/distributors">distributors</a>
-     * of this movie.
-     */
-    public List<Company> getDistributors() {
-        return distributors;
-    }
-
-    /**
-     * Sets the list of <a href="https://contribute.imdb.com/updates/guide/distributors">distributors</a>
-     * of this movie.
-     */
-    public void setDistributors(List<Company> distributors) {
-        this.distributors = distributors;
-    }
-
-    /**
      * Gets the list of <a href="https://contribute.imdb.com/updates/guide/genres">genres that
      * characterise this movie</a>.
      */
@@ -412,22 +355,6 @@ public class Movie {
     }
 
     /**
-     * Gets the list of <a href="https://contribute.imdb.com/updates/guide/production_companies">production
-     * companies</a> for this movie.
-     */
-    public List<Company> getProdCompanies() {
-        return prodCompanies;
-    }
-
-    /**
-     * Sets the list of <a href="https://contribute.imdb.com/updates/guide/production_companies">production
-     * companies</a> for this movie.
-     */
-    public void setProdCompanies(List<Company> prodCompanies) {
-        this.prodCompanies = prodCompanies;
-    }
-
-    /**
      * Gets the <a href="https://contribute.imdb.com/updates/guide/release_dates">release dates</a>
      * for this movie. The information is structured as a map, where the key is a country name
      * (for example, <tt>"USA"</tt>) and the value is a list of dates at which the movie was
@@ -465,73 +392,5 @@ public class Movie {
      */
     public void setRunningTimes(List<RunningTime> runningTimes) {
         this.runningTimes = runningTimes;
-    }
-
-    /**
-     * Gets the <a href="https://contribute.imdb.com/updates/guide/sound_mix">sound mix systems</a>
-     * used in this movie.
-     */
-    public List<GeneralInfo> getSoundMix() {
-        return soundMix;
-    }
-
-    /**
-     * Sets the <a href="https://contribute.imdb.com/updates/guide/sound_mix">sound mix systems</a>
-     * used in this movie.
-     */
-    public void setSoundMix(List<GeneralInfo> soundMix) {
-        this.soundMix = soundMix;
-    }
-
-    /**
-     * Gets the list of <a href="https://contribute.imdb.com/updates/guide/special_effects_companies">special
-     * effects and visual effects companies</a> that worked on this movie.
-     */
-    public List<Company> getSfxCompanies() {
-        return sfxCompanies;
-    }
-
-    /**
-     * Sets the list of <a href="https://contribute.imdb.com/updates/guide/special_effects_companies">special
-     * effects and visual effects companies</a> that worked on this movie.
-     */
-    public void setSfxCompanies(List<Company> sfxCompanies) {
-        this.sfxCompanies = sfxCompanies;
-    }
-
-    /**
-     * Gets various <a href="https://contribute.imdb.com/updates/guide/technical">technical data about
-     * how this movie was created</a>. Returns a map in which the key is one of the following:
-     *
-     * <ul>
-     * <li><tt>"camera_lens"</tt>: The
-     * <a href="https://contribute.imdb.com/updates/guide/technical_cam">model of camera and lens</a>
-     * that were used to shoot the movie.</li>
-     * <li><tt>"length_meters"</tt>: The
-     * <a href="https://contribute.imdb.com/updates/guide/technical_met">length of the film
-     * in meters</a>.</li>
-     * <li><tt>"negative_format"</tt>: The
-     * <a href="https://contribute.imdb.com/updates/guide/technical_ofm">negative format in millimeters</a>.</li>
-     * <li><tt>"printed_format"</tt>: The
-     * <a href="https://contribute.imdb.com/updates/guide/technical_pfm">printed format in millimeters</a>.</li>
-     * <li><tt>"aspect_ratio"</tt>: The
-     * <a href="https://contribute.imdb.com/updates/guide/technical_rat">image ratio (width : height)</a>.</li>
-     * <li><tt>"process"</tt>: The
-     * <a href="https://contribute.imdb.com/updates/guide/technical_pcs">cinematographic process
-     * or video system</a>.</li>
-     * <li><tt>"laboratory"</tt>: The
-     * <a href="https://contribute.imdb.com/updates/guide/technical_lab">name and location of the laboratory</a>.</li>
-     * </ul>
-     */
-    public Map<String, List<GeneralInfo>> getTechnical() {
-        return technical;
-    }
-
-    /**
-     * Sets various <a href="https://contribute.imdb.com/updates/guide/technical">technical data about
-     * how this movie was created</a>. See {@link #getTechnical()} for more details.
-     */
-    public void setTechnical(Map<String, List<GeneralInfo>> technical) {
-        this.technical = technical;
     }
 }

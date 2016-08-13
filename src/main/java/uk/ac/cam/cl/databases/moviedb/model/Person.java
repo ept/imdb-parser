@@ -18,7 +18,6 @@ public class Person {
     private List<BiographyItem> costumeDesignerIn;
     private List<BiographyItem> directorIn;
     private List<BiographyItem> editorIn;
-    private List<BiographyItem> miscellaneousIn;
     private List<BiographyItem> producerIn;
     private List<BiographyItem> productionDesignerIn;
     private List<ScriptWriter> writerIn;
@@ -197,22 +196,6 @@ public class Person {
      */
     public void setEditorIn(List<BiographyItem> editorIn) {
         this.editorIn = editorIn;
-    }
-
-    /**
-     * If this person was a miscellaneous crew member for movies (i.e. not an actor, director,
-     * producer, designer, etc), gets the list of movies that they worked on, sorted by year.
-     * Otherwise returns <tt>null</tt>.
-     */
-    public List<BiographyItem> getMiscellaneousIn() {
-        return miscellaneousIn;
-    }
-
-    /**
-     * Sets the list of movies on which this person worked as miscellaneous crew member.
-     */
-    public void setMiscellaneousIn(List<BiographyItem> miscellaneousIn) {
-        this.miscellaneousIn = miscellaneousIn;
     }
 
     /**

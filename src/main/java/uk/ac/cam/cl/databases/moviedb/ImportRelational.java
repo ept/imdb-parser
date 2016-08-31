@@ -127,7 +127,8 @@ public class ImportRelational {
                 "credits.properties->>'line_order', " +
                 "credits.properties->>'group_order', " +
                 "credits.properties->>'subgroup_order' " +
-                "FROM credits JOIN " + moviesTable + " ON (" + moviesTable + ".properties->>'id')::integer = movie_id");
+                "FROM credits JOIN " + moviesTable + " ON (" + moviesTable + ".properties->>'id')::integer = movie_id " +
+                "WHERE type <> 'miscellaneous'");
             while (results.next()) {
                 copyRow(results, insert, INTEGER, INTEGER, VARCHAR, VARCHAR, VARCHAR, INTEGER, INTEGER, INTEGER, INTEGER);
             }

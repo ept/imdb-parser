@@ -12,7 +12,6 @@
                 <include>uk.ac.cam.cl.databases.moviedb:moviedb-exercises</include>
                 <include>com.google.code.gson:gson</include>
                 <include>com.sleepycat:je</include>
-                <include>net.sf.corn:corn-cps</include>
             </includes>
             <useTransitiveDependencies>true</useTransitiveDependencies>
             <useTransitiveFiltering>true</useTransitiveFiltering>
@@ -24,11 +23,4 @@
             </unpackOptions>
         </dependencySet>
     </dependencySets>
-
-    <fileSets>
-        <fileSet>
-            <directory>document-small</directory>
-            <outputDirectory>resources/document-db</outputDirectory>
-        </fileSet>
-    </fileSets>
 </assembly>

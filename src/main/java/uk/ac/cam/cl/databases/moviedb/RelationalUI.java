@@ -11,10 +11,7 @@ public class RelationalUI {
         }
 
         File dataDir = new File(args[0]);
-        if (!dataDir.exists()) {
-            dataDir.mkdirs();
-            new ResourceExtractor("/resources/relational-db/", dataDir).extract();
-        }
+        if (!dataDir.exists()) dataDir.mkdirs();
 
         DatabaseManagerSwing.main(new String[] {
             "--url", "jdbc:hsqldb:file:" + new File(dataDir, "moviedb") + ";shutdown=true"

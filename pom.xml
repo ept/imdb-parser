@@ -56,13 +56,6 @@
             <version>9.4.1208</version>
         </dependency>
 
-        <!-- Load dependencies from classpath: https://sites.google.com/site/javacornproject/corn-cps -->
-        <dependency>
-            <groupId>net.sf.corn</groupId>
-            <artifactId>corn-cps</artifactId>
-            <version>1.1.7</version>
-        </dependency>
-
 	<!-- https://mvnrepository.com/artifact/org.neo4j/neo4j 
 	<dependency>
 	  <groupId>org.neo4j</groupId>
@@ -103,7 +96,6 @@
                         <exclude>uk/ac/cam/cl/databases/moviedb/Import.java</exclude>
                         <exclude>uk/ac/cam/cl/databases/moviedb/ImportDocument.java</exclude>
                         <exclude>uk/ac/cam/cl/databases/moviedb/ImportRelational.java</exclude>
-                        <exclude>uk/ac/cam/cl/databases/moviedb/ResourceExtractor.java</exclude>
                         <exclude>uk/ac/cam/cl/databases/moviedb/RelationalUI.java</exclude>
                     </sourceFileExcludes>
                 </configuration>

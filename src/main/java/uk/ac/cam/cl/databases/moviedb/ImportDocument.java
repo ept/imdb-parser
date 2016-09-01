@@ -38,8 +38,10 @@ public class ImportDocument {
     }
 
     public void process() throws IOException, SQLException {
+        if (!outputDir.exists()) outputDir.mkdirs();
+
         try (Connection pg = DriverManager.getConnection("jdbc:postgresql:");
-                MovieDB movieDB = new MovieDB(outputDir, false)) {
+                MovieDB movieDB = new MovieDB(outputDir)) {
             readTable(pg, moviesTable, movieDB::putMovie);
             readTable(pg, peopleTable, movieDB::putPerson);
         }

@@ -112,11 +112,11 @@
                 <executions>
                     <!-- Build jar file that bundles document database files and dependencies -->
                     <execution>
-                        <id>make-document-jar</id>
+                        <id>make-document-db</id>
                         <phase>package</phase>
                         <configuration>
                             <descriptors>
-                                <descriptor>src/main/assembly/document-jar.xml</descriptor>
+                                <descriptor>src/main/assembly/document-db.xml</descriptor>
                             </descriptors>
                         </configuration>
                         <goals>
@@ -126,11 +126,11 @@
 
                     <!-- Build jar file that bundles relational database files and dependencies -->
                     <execution>
-                        <id>make-relational-jar</id>
+                        <id>make-relational-db</id>
                         <phase>package</phase>
                         <configuration>
                             <descriptors>
-                                <descriptor>src/main/assembly/relational-jar.xml</descriptor>
+                                <descriptor>src/main/assembly/relational-db.xml</descriptor>
                             </descriptors>
                             <archive>
                                 <manifest>

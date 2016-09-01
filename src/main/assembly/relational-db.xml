@@ -1,5 +1,5 @@
 <assembly>
-    <id>document-jar</id>
+    <id>relational-db</id>
     <formats>
         <format>jar</format>
     </formats>
@@ -10,9 +10,15 @@
             <outputDirectory>/</outputDirectory>
             <includes>
                 <include>uk.ac.cam.cl.databases.moviedb:moviedb-exercises</include>
-                <include>com.google.code.gson:gson</include>
-                <include>com.sleepycat:je</include>
+                <include>org.hsqldb:hsqldb</include>
             </includes>
+            <excludes>
+                <exclude>org.hsqldb:sqltool</exclude>
+                <exclude>com.google.code.gson:gson</exclude>
+                <exclude>com.sleepycat:je</exclude>
+                <exclude>org.postgresql:postgresql</exclude>
+                <exclude>org.neo4j.driver:*</exclude>
+            </excludes>
             <useTransitiveDependencies>true</useTransitiveDependencies>
             <useTransitiveFiltering>true</useTransitiveFiltering>
             <unpack>true</unpack>

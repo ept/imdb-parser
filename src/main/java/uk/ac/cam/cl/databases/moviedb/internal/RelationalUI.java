@@ -1,4 +1,4 @@
-package uk.ac.cam.cl.databases.moviedb;
+package uk.ac.cam.cl.databases.moviedb.internal;
 
 import java.io.File;
 import org.hsqldb.util.DatabaseManagerSwing;

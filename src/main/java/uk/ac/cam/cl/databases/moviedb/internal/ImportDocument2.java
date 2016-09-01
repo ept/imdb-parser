@@ -1,4 +1,4 @@
-package uk.ac.cam.cl.databases.moviedb;
+package uk.ac.cam.cl.databases.moviedb.internal;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,16 +8,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.function.Consumer;
+import uk.ac.cam.cl.databases.moviedb.MovieDB;
 
 /**
  * NOTE: This importer runs out of memory and crashes. Haven't yet figured out why
  * memory isn't getting freed.
  */
-public class ImportDocument {
+public class ImportDocument2 {
     private final File outputDir;
     private final String moviesTable, peopleTable;
 
-    public ImportDocument(File outputDir, boolean onlyTopTitles) {
+    public ImportDocument2(File outputDir, boolean onlyTopTitles) {
         this.outputDir = outputDir;
         if (onlyTopTitles) {
             this.moviesTable = "movies_doc_small";
@@ -53,6 +54,6 @@ public class ImportDocument {
             System.exit(1);
         }
         Class.forName("org.postgresql.Driver");
-        new ImportDocument(new File(args[1]), args[0].equals("--small")).process();
+        new ImportDocument2(new File(args[1]), args[0].equals("--small")).process();
     }
 }

@@ -92,12 +92,7 @@
                 <version>2.10.4</version>
                 <configuration>
                     <outputDirectory>target/site/apidocs</outputDirectory>
-                    <sourceFileExcludes>
-                        <exclude>uk/ac/cam/cl/databases/moviedb/Import.java</exclude>
-                        <exclude>uk/ac/cam/cl/databases/moviedb/ImportDocument.java</exclude>
-                        <exclude>uk/ac/cam/cl/databases/moviedb/ImportRelational.java</exclude>
-                        <exclude>uk/ac/cam/cl/databases/moviedb/RelationalUI.java</exclude>
-                    </sourceFileExcludes>
+                    <excludePackageNames>uk.ac.cam.cl.databases.moviedb.internal</excludePackageNames>
                 </configuration>
                 <executions>
                     <execution>
@@ -139,7 +134,7 @@
                             </descriptors>
                             <archive>
                                 <manifest>
-                                    <mainClass>uk.ac.cam.cl.databases.moviedb.RelationalUI</mainClass>
+                                    <mainClass>uk.ac.cam.cl.databases.moviedb.internal.RelationalUI</mainClass>
                                 </manifest>
                             </archive>
                         </configuration>
@@ -189,7 +184,7 @@
                                     <goal>java</goal>
                                 </goals>
                                 <configuration>
-                                    <mainClass>uk.ac.cam.cl.databases.moviedb.Import</mainClass>
+                                    <mainClass>uk.ac.cam.cl.databases.moviedb.internal.ImportDocument</mainClass>
                                     <arguments>
                                         <argument>${project.basedir}/movies_doc.json.gz</argument>
                                         <argument>${project.basedir}/people_doc.json.gz</argument>
@@ -225,7 +220,7 @@
                                     <goal>java</goal>
                                 </goals>
                                 <configuration>
-                                    <mainClass>uk.ac.cam.cl.databases.moviedb.Import</mainClass>
+                                    <mainClass>uk.ac.cam.cl.databases.moviedb.internal.ImportDocument</mainClass>
                                     <arguments>
                                         <argument>${project.basedir}/movies_doc_small.json.gz</argument>
                                         <argument>${project.basedir}/people_doc_small.json.gz</argument>
@@ -261,7 +256,7 @@
                                     <goal>java</goal>
                                 </goals>
                                 <configuration>
-                                    <mainClass>uk.ac.cam.cl.databases.moviedb.ImportRelational</mainClass>
+                                    <mainClass>uk.ac.cam.cl.databases.moviedb.internal.ImportRelational</mainClass>
                                     <arguments>
                                         <argument>--large</argument>
                                         <argument>${relational.large.path}</argument>
@@ -296,7 +291,7 @@
                                     <goal>java</goal>
                                 </goals>
                                 <configuration>
-                                    <mainClass>uk.ac.cam.cl.databases.moviedb.ImportRelational</mainClass>
+                                    <mainClass>uk.ac.cam.cl.databases.moviedb.internal.ImportRelational</mainClass>
                                     <arguments>
                                         <argument>--small</argument>
                                         <argument>${relational.small.path}</argument>

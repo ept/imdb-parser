@@ -36,18 +36,14 @@ import uk.ac.cam.cl.databases.moviedb.model.Person;
  * <p>The database has two primary key indexes (looking up a person or a movie by ID), and
  * two secondary indexes (looking up a person by name, or looking up a movie by title).
  *
- * <p>For convenience, MovieDB allows its data files to be packaged as resources in a JAR
- * file on the classpath, and they are extracted to a directory when it is first run.
- * This allows us to distribute a single JAR file containing both library dependencies and
- * example data.
- *
- * <p>When you have finished using the database, you should close it using {@link #close()},
+ * <p>You can open the database in a specified directory on disk using {@link MovieDB#open(String)}.
+ * When you have finished using the database, you should close it using {@link #close()},
  * which clears up any locks and pending writes, and shuts down background threads. The
  * easiest way of doing this is with a
  * <a href="http://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html">try-with-resources
  * statement</a>, which takes advantage of the {@link AutoCloseable} interface:
  *
- * <pre>try (MovieDB database = new MovieDB(new File("document-db")) {
+ * <pre>try (MovieDB database = MovieDB.open("document-db")) {
  *    ... // use the database
  *}</pre>
  */
@@ -63,12 +59,18 @@ public class MovieDB implements AutoCloseable {
      *
      * @param dataDir The directory in which to store the data files.
      */
-    public MovieDB(File dataDir) {
+    public static MovieDB open(String dataDir) {
+        return new MovieDB(dataDir);
+    }
+
+    /**
+     * Use {@link MovieDB#open(String)} to create a new MovieDB instance.
+     */
+    private MovieDB(String dataDir) {
         EnvironmentConfig envConfig = new EnvironmentConfig();
         envConfig.setAllowCreate(true);
         envConfig.setTransactional(false);
-        if (dbEnv != null) throw new IllegalStateException("Database is already open");
-        dbEnv = new Environment(dataDir, envConfig);
+        dbEnv = new Environment(new File(dataDir), envConfig);
 
         DatabaseConfig dbConfig = new DatabaseConfig();
         dbConfig.setAllowCreate(true);
@@ -125,6 +127,7 @@ public class MovieDB implements AutoCloseable {
      * @return The requested movie, or null if there is none with the given id.
      */
     public Movie getMovieById(int id) {
+        if (moviesDB == null) throw new IllegalStateException("Database is not open");
         DatabaseEntry key = new DatabaseEntry(), value = new DatabaseEntry();
         intBinding.objectToEntry(id, key);
         if (moviesDB.get(null, key, value, null) == OperationStatus.SUCCESS) {
@@ -140,6 +143,7 @@ public class MovieDB implements AutoCloseable {
      * @return The requested person, or null if there is none with the given id.
      */
     public Person getPersonById(int id) {
+        if (peopleDB == null) throw new IllegalStateException("Database is not open");
         DatabaseEntry key = new DatabaseEntry(), value = new DatabaseEntry();
         intBinding.objectToEntry(id, key);
         if (peopleDB.get(null, key, value, null) == OperationStatus.SUCCESS) {
@@ -266,6 +270,7 @@ public class MovieDB implements AutoCloseable {
         private T next;
 
         private SearchByPrefix(SecondaryDatabase index, String titlePrefix, Function<String, T> parseJson) {
+            if (index == null) throw new IllegalStateException("Database is not open");
             prefix = titlePrefix.getBytes(UTF8);
             key.setData(Arrays.copyOf(prefix, prefix.length));
             this.parseJson = parseJson;

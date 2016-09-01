@@ -41,7 +41,7 @@ public class ImportDocument {
         if (!outputDir.exists()) outputDir.mkdirs();
 
         try (Connection pg = DriverManager.getConnection("jdbc:postgresql:");
-                MovieDB movieDB = new MovieDB(outputDir)) {
+                MovieDB movieDB = MovieDB.open(outputDir.getAbsolutePath())) {
             readTable(pg, moviesTable, movieDB::putMovie);
             readTable(pg, peopleTable, movieDB::putPerson);
         }

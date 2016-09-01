@@ -26,7 +26,7 @@ public class Import {
     public void process() throws IOException {
         if (!outputDir.exists()) outputDir.mkdirs();
 
-        try (MovieDB movieDB = new MovieDB(outputDir)) {
+        try (MovieDB movieDB = MovieDB.open(outputDir.getAbsolutePath())) {
             try (BufferedReader input = readFile(moviesFile)) {
                 input.lines().forEach(json -> movieDB.putMovie(json));
             }

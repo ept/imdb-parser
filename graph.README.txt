@@ -1,0 +1,77 @@
+
+Note on neo4j tools.  The contents of neo4j-community-3.0.4/bin/: 
+
+   neo4j-shell	     (repl to be used by students, in addition to web interface)
+   neo4j-import	     (used in build_graph.sh, see below) 
+
+   neo4j-shared.sh   (sets up environment vars.  not used here. Should it be?) 
+   neo4j             (not used here) 
+   neo4j-admin	     (not used here) 
+   tools             (not used here) 
+
+
+The neo4j extract/import process requires these directories (not sure who should create them)
+    csv-small  
+    csv-large 
+    graph-small 
+    graph-large 
+   
+
+A graph database is extracted from a document database in TWO STEPS 
+(this has been tested with both small and large data sets): 
+
+1) Extract CSV files from the document database, 
+
+   ExportCSV <document-db-source-directory> <csv-target-directory> 
+
+   For example, 
+
+   ExportCSV document-small csv-small 
+
+   (for the large data set this required 15 minutes on my shabby laptop ....) 
+
+   Currently, this code has been developed in the moviedb-exercises directory, using 
+   
+    javac -classpath target/moviedb-exercises-0.0.1-document-jar.jar ExportCSV.java
+    java -classpath .:target/moviedb-exercises-0.0.1-document-jar.jar  ExportCSV document-small csv-small
+
+
+2) Run the shell script 
+
+   build_graph.sh <csv-source-directory> <graph-target-directory> 
+
+   For example, 
+
+   build_graph.sh csv-small graph-small 
+
+   (for the large data set this required ONLY 3 minutes on my shabby laptop!) 
+
+   Note 1: this script uses the tool neo4j-import, which imports bulk 
+   csv-formated files. For documentation, see 
+   https://neo4j.com/docs/operations-manual/current/deployment/#import-tool
+   https://neo4j.com/docs/operations-manual/current/tutorial/#tutorial-import-tool
+   (This means that pom.xml no longer needs to include neo4j packages, since 
+    the java-based creation of the graph database has been abandoned.) 
+
+   Note 2: this produces output to stdout that might be useful to log for debugging when things break... 
+
+   Note 2: build_graph.sh currently conains a hard-coded path! 
+
+TODO: integrate all of this into the pom.xml package managment. 
+In addition, these files: 
+
+   src/examples/cypher/*.cql  
+   src/rst/graph-db.rst 
+   src/rst/graph-setup.rst 
+
+Note: to produce output from cypher files, this seems to work: 
+
+   neo4j-shell -c --path graph-db-dir <  foo.cql
+
+I've put this in a script, run_cypher.sh, so this works 
+
+  ./run_cypher.sh graph-small src/examples/cypher/list_all_titles.cql
+
+(WARKNING : script contains a hard-coded path) 
+
+Now, how to plumb this into dexy.yaml ....?.... 

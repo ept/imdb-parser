@@ -7,8 +7,14 @@
 /relational-db/
 /relational-large/
 /relational-small/
+/csv-large/
+/csv-small/
+/graph-large/
+/graph-small/
 /movies_doc.json.gz
 /people_doc.json.gz
 /movies_doc_small.json.gz
 /people_doc_small.json.gz
 /target/
+/scratch/
+

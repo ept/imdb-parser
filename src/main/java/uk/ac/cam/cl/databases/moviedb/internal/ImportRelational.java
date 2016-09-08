@@ -70,6 +70,7 @@ public class ImportRelational {
             "id integer PRIMARY KEY, " +
             "title varchar(255) NOT NULL, " +
             "year integer)");
+        execHSQL("CREATE INDEX movies_title ON movies (title)");
 
         try (PreparedStatement insert = hsql.prepareStatement("INSERT INTO movies (id, title, year) values(?, ?, ?)");
                 Statement select = pg.createStatement()) {
@@ -79,9 +80,6 @@ public class ImportRelational {
                 copyRow(results, insert, INTEGER, VARCHAR, INTEGER);
             }
         }
-
-        System.out.println("Building indexes on movies...");
-        execHSQL("CREATE INDEX movies_title ON movies (title)");
     }
 
     private void copyPeople() throws SQLException {
@@ -90,6 +88,7 @@ public class ImportRelational {
             "id integer PRIMARY KEY, " +
             "name varchar(255) NOT NULL, " +
             "gender varchar(10))");
+        execHSQL("CREATE INDEX people_name ON people (name)");
 
         try (PreparedStatement insert = hsql.prepareStatement("INSERT INTO people (id, name, gender) values(?, ?, ?)");
                 Statement select = pg.createStatement()) {
@@ -99,23 +98,21 @@ public class ImportRelational {
                 copyRow(results, insert, INTEGER, VARCHAR, VARCHAR);
             }
         }
-
-        System.out.println("Building indexes on people...");
-        execHSQL("CREATE INDEX people_name ON people (name)");
     }
 
     private void copyCredits() throws SQLException {
         System.out.println("Copying credits...");
         execHSQL("CREATE CACHED TABLE credits (" +
-            "person_id integer NOT NULL, " +
-            "movie_id integer NOT NULL, " +
+            "person_id integer NOT NULL REFERENCES people (id), " +
+            "movie_id integer NOT NULL REFERENCES movies (id), " +
             "type varchar(20) NOT NULL, " +
             "info varchar(255), " +
             "character varchar(255), " +
             "position integer, " +
             "line_order integer, " +
             "group_order integer, " +
-            "subgroup_order integer)");
+            "subgroup_order integer, " +
+            "UNIQUE (person_id, movie_id, type))");
 
         try (PreparedStatement insert = hsql.prepareStatement("INSERT INTO credits (person_id, movie_id, type, info, character, position, line_order, group_order, subgroup_order) values(?, ?, ?, ?, ?, ?, ?, ?, ?)");
                 Statement select = pg.createStatement()) {
@@ -133,18 +130,12 @@ public class ImportRelational {
                 copyRow(results, insert, INTEGER, INTEGER, VARCHAR, VARCHAR, VARCHAR, INTEGER, INTEGER, INTEGER, INTEGER);
             }
         }
-
-        System.out.println("Building indexes on credits...");
-        execHSQL("CREATE UNIQUE INDEX credits_person_id ON credits (person_id, movie_id, type)");
-        execHSQL("CREATE INDEX credits_movie_id ON credits (movie_id)");
-        execHSQL("ALTER TABLE credits ADD FOREIGN KEY (person_id) REFERENCES people (id)");
-        execHSQL("ALTER TABLE credits ADD FOREIGN KEY (movie_id) REFERENCES movies (id)");
     }
 
     private void copyCertificates() throws SQLException {
         System.out.println("Copying certificates...");
         execHSQL("CREATE CACHED TABLE certificates (" +
-            "movie_id integer NOT NULL, " +
+            "movie_id integer NOT NULL REFERENCES movies (id), " +
             "country varchar(20) NOT NULL, " +
             "certificate varchar(20) NOT NULL, " +
             "note varchar(255))");
@@ -158,16 +149,12 @@ public class ImportRelational {
                 copyRow(results, insert, INTEGER, VARCHAR, VARCHAR, VARCHAR);
             }
         }
-
-        System.out.println("Building indexes on certificates...");
-        execHSQL("CREATE INDEX certificates_movie_id ON certificates (movie_id)");
-        execHSQL("ALTER TABLE certificates ADD FOREIGN KEY (movie_id) REFERENCES movies (id)");
     }
 
     private void copyColorInfo() throws SQLException {
         System.out.println("Copying color_info...");
         execHSQL("CREATE CACHED TABLE color_info (" +
-            "movie_id integer NOT NULL, " +
+            "movie_id integer NOT NULL REFERENCES movies (id), " +
             "value varchar(20) NOT NULL, " +
             "note varchar(255))");
 
@@ -180,16 +167,12 @@ public class ImportRelational {
                 copyRow(results, insert, INTEGER, VARCHAR, VARCHAR);
             }
         }
-
-        System.out.println("Building indexes on color_info...");
-        execHSQL("CREATE INDEX color_info_movie_id ON color_info (movie_id)");
-        execHSQL("ALTER TABLE color_info ADD FOREIGN KEY (movie_id) REFERENCES movies (id)");
     }
 
     private void copyGenres() throws SQLException {
         System.out.println("Copying genres...");
         execHSQL("CREATE CACHED TABLE genres (" +
-            "movie_id integer NOT NULL, " +
+            "movie_id integer NOT NULL REFERENCES movies (id), " +
             "genre varchar(25) NOT NULL)");
 
         try (PreparedStatement insert = hsql.prepareStatement("INSERT INTO genres (movie_id, genre) values(?, ?)");
@@ -201,16 +184,12 @@ public class ImportRelational {
                 copyRow(results, insert, INTEGER, VARCHAR);
             }
         }
-
-        System.out.println("Building indexes on genres...");
-        execHSQL("CREATE INDEX genres_movie_id ON genres (movie_id)");
-        execHSQL("ALTER TABLE genres ADD FOREIGN KEY (movie_id) REFERENCES movies (id)");
     }
 
     private void copyKeywords() throws SQLException {
         System.out.println("Copying keywords...");
         execHSQL("CREATE CACHED TABLE keywords (" +
-            "movie_id integer NOT NULL, " +
+            "movie_id integer NOT NULL REFERENCES movies (id), " +
             "keyword varchar(127) NOT NULL)");
 
         try (PreparedStatement insert = hsql.prepareStatement("INSERT INTO keywords (movie_id, keyword) values(?, ?)");
@@ -222,16 +201,12 @@ public class ImportRelational {
                 copyRow(results, insert, INTEGER, VARCHAR);
             }
         }
-
-        System.out.println("Building indexes on keywords...");
-        execHSQL("CREATE INDEX keywords_movie_id ON keywords (movie_id)");
-        execHSQL("ALTER TABLE keywords ADD FOREIGN KEY (movie_id) REFERENCES movies (id)");
     }
 
     private void copyLanguages() throws SQLException {
         System.out.println("Copying languages...");
         execHSQL("CREATE CACHED TABLE languages (" +
-            "movie_id integer NOT NULL, " +
+            "movie_id integer NOT NULL REFERENCES movies (id), " +
             "language varchar(35) NOT NULL, " +
             "note varchar(255))");
 
@@ -239,21 +214,17 @@ public class ImportRelational {
                 Statement select = pg.createStatement()) {
             ResultSet results = select.executeQuery(
                 "SELECT properties->>'id', language->>'language', language->>'note' " +
-                "FROM " + moviesTable + ", jsonb_array_elements(properties->'language') AS language");
+                "FROM " + moviesTable + ", jsonb_array_elements(properties->'languages') AS language");
             while (results.next()) {
                 copyRow(results, insert, INTEGER, VARCHAR, VARCHAR);
             }
         }
-
-        System.out.println("Building indexes on languages...");
-        execHSQL("CREATE INDEX languages_movie_id ON languages (movie_id)");
-        execHSQL("ALTER TABLE languages ADD FOREIGN KEY (movie_id) REFERENCES movies (id)");
     }
 
     private void copyLocations() throws SQLException {
         System.out.println("Copying locations...");
         execHSQL("CREATE CACHED TABLE locations (" +
-            "movie_id integer NOT NULL, " +
+            "movie_id integer NOT NULL REFERENCES movies (id), " +
             "location varchar(255) NOT NULL, " +
             "note varchar(511))");
 
@@ -266,16 +237,12 @@ public class ImportRelational {
                 copyRow(results, insert, INTEGER, VARCHAR, VARCHAR);
             }
         }
-
-        System.out.println("Building indexes on locations...");
-        execHSQL("CREATE INDEX locations_movie_id ON locations (movie_id)");
-        execHSQL("ALTER TABLE locations ADD FOREIGN KEY (movie_id) REFERENCES movies (id)");
     }
 
     private void copyReleaseDates() throws SQLException {
         System.out.println("Copying release_dates...");
         execHSQL("CREATE CACHED TABLE release_dates (" +
-            "movie_id integer NOT NULL, " +
+            "movie_id integer NOT NULL REFERENCES movies (id), " +
             "country varchar(40) NOT NULL, " +
             "release_date varchar(10) NOT NULL, " +
             "note varchar(255))");
@@ -293,16 +260,12 @@ public class ImportRelational {
                 copyRow(results, insert, INTEGER, VARCHAR, VARCHAR, VARCHAR);
             }
         }
-
-        System.out.println("Building indexes on release_dates...");
-        execHSQL("CREATE INDEX release_dates_movie_id ON release_dates (movie_id)");
-        execHSQL("ALTER TABLE release_dates ADD FOREIGN KEY (movie_id) REFERENCES movies (id)");
     }
 
     private void copyRunningTimes() throws SQLException {
         System.out.println("Copying running_times...");
         execHSQL("CREATE CACHED TABLE running_times (" +
-            "movie_id integer NOT NULL, " +
+            "movie_id integer NOT NULL REFERENCES movies (id), " +
             "running_time varchar(40) NOT NULL, " +
             "note varchar(255))");
 
@@ -315,10 +278,6 @@ public class ImportRelational {
                 copyRow(results, insert, INTEGER, VARCHAR, VARCHAR);
             }
         }
-
-        System.out.println("Building indexes on running_times...");
-        execHSQL("CREATE INDEX running_times_movie_id ON running_times (movie_id)");
-        execHSQL("ALTER TABLE running_times ADD FOREIGN KEY (movie_id) REFERENCES movies (id)");
     }
 
     private void copyRow(ResultSet results, PreparedStatement insert, int... types) throws SQLException {

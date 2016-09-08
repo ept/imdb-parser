@@ -60,10 +60,20 @@
             <version>9.4.1208</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.neo4j/neo4j-import-tool -->
+        <!-- Neo4j graph database: http://neo4j.com/ -->
         <dependency>
             <groupId>org.neo4j</groupId>
             <artifactId>neo4j-import-tool</artifactId>
+            <version>3.0.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.neo4j</groupId>
+            <artifactId>neo4j-shell</artifactId>
+            <version>3.0.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.neo4j</groupId>
+            <artifactId>neo4j-cypher</artifactId>
             <version>3.0.4</version>
         </dependency>
     </dependencies>

@@ -16,7 +16,7 @@
             <excludes>
                 <exclude>org.hsqldb:*</exclude>
                 <exclude>org.postgresql:postgresql</exclude>
-                <exclude>org.neo4j.driver:*</exclude>
+                <exclude>org.neo4j:*</exclude>
             </excludes>
             <useTransitiveDependencies>true</useTransitiveDependencies>
             <useTransitiveFiltering>true</useTransitiveFiltering>

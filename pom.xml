@@ -13,6 +13,10 @@
         <document.small.path>${project.basedir}/document-small</document.small.path>
         <relational.large.path>${project.basedir}/relational-large</relational.large.path>
         <relational.small.path>${project.basedir}/relational-small</relational.small.path>
+        <csv.large.path>${project.basedir}/csv-large</csv.large.path>
+        <csv.small.path>${project.basedir}/csv-small</csv.small.path>
+        <graph.large.path>${project.basedir}/graph-large</graph.large.path>
+        <graph.small.path>${project.basedir}/graph-small</graph.small.path>
     </properties>
 
     <groupId>uk.ac.cam.cl.databases.moviedb</groupId>
@@ -56,20 +60,12 @@
             <version>9.4.1208</version>
         </dependency>
 
-	<!-- https://mvnrepository.com/artifact/org.neo4j/neo4j 
-	<dependency>
-	  <groupId>org.neo4j</groupId>
-	  <artifactId>neo4j</artifactId>
-	  <version>3.0.3</version>
-	</dependency>
-        -->
-
-	<dependency>
-	  <groupId>org.neo4j.driver</groupId>
-	  <artifactId>neo4j-java-driver</artifactId>
-	  <version>1.0.3</version>
-	</dependency>
-
+        <!-- https://mvnrepository.com/artifact/org.neo4j/neo4j-import-tool -->
+        <dependency>
+            <groupId>org.neo4j</groupId>
+            <artifactId>neo4j-import-tool</artifactId>
+            <version>3.0.4</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -295,6 +291,78 @@
                                     <arguments>
                                         <argument>--small</argument>
                                         <argument>${relational.small.path}</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!-- If the graph-large directory does not exist, run the import tool to create it -->
+        <profile>
+            <id>import-graph-large</id>
+            <activation>
+                <file>
+                    <missing>graph-large</missing>
+                </file>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.2.1</version>
+                        <executions>
+                            <execution>
+                                <id>run-import-graph-large</id>
+                                <phase>process-classes</phase>
+                                <goals>
+                                    <goal>java</goal>
+                                </goals>
+                                <configuration>
+                                    <mainClass>uk.ac.cam.cl.databases.moviedb.internal.ImportGraph</mainClass>
+                                    <arguments>
+                                        <argument>${document.large.path}</argument>
+                                        <argument>${csv.large.path}</argument>
+                                        <argument>${graph.large.path}</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!-- If the graph-small directory does not exist, run the import tool to create it -->
+        <profile>
+            <id>import-graph-small</id>
+            <activation>
+                <file>
+                    <missing>graph-small</missing>
+                </file>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.2.1</version>
+                        <executions>
+                            <execution>
+                                <id>run-import-graph-small</id>
+                                <phase>process-classes</phase>
+                                <goals>
+                                    <goal>java</goal>
+                                </goals>
+                                <configuration>
+                                    <mainClass>uk.ac.cam.cl.databases.moviedb.internal.ImportGraph</mainClass>
+                                    <arguments>
+                                        <argument>${document.small.path}</argument>
+                                        <argument>${csv.small.path}</argument>
+                                        <argument>${graph.small.path}</argument>
                                     </arguments>
                                 </configuration>
                             </execution>

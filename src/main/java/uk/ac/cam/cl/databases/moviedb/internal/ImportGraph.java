@@ -1,14 +1,16 @@
 package uk.ac.cam.cl.databases.moviedb.internal;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import org.neo4j.tooling.ImportTool;
 import uk.ac.cam.cl.databases.moviedb.MovieDB;
 import uk.ac.cam.cl.databases.moviedb.model.*;
 
 //
-// ImportGraph document-database-directory csv-output-directory
+// ImportGraph document-database-directory csv-output-directory neo4j-output-directory
 //
 public class ImportGraph {
 
@@ -43,6 +45,8 @@ public class ImportGraph {
 
         String document_db_dir = args[0];
         String csv_dir = args[1];
+        String neo4j_dir = args[2];
+        new File(csv_dir).mkdirs();
 
         try (MovieDB database = MovieDB.open(document_db_dir)) {
 
@@ -401,5 +405,26 @@ public class ImportGraph {
             }
             f_genres.close();
         }
+
+        ImportTool.main(new String[] {
+            "--delimiter", "|", 
+            "--into", neo4j_dir,
+            "--nodes", csv_dir + "/movie.csv",
+            "--nodes", csv_dir + "/person.csv",
+            "--nodes", csv_dir + "/country.csv",
+            "--nodes", csv_dir + "/genres.csv",
+            "--relationships", csv_dir + "/acts_in.csv",
+            "--relationships", csv_dir + "/directs.csv",
+            "--relationships", csv_dir + "/camera.csv",
+            "--relationships", csv_dir + "/compose.csv",
+            "--relationships", csv_dir + "/edits.csv",
+            "--relationships", csv_dir + "/produces.csv",
+            "--relationships", csv_dir + "/production_design.csv",
+            "--relationships", csv_dir + "/costume_design.csv",
+            "--relationships", csv_dir + "/certificates.csv",
+            "--relationships", csv_dir + "/release_dates.csv", 
+            "--relationships", csv_dir + "/has_genre.csv",
+            "--relationships", csv_dir + "/writes.csv"
+        });
     }
 }

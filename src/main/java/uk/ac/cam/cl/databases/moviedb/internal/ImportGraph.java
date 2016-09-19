@@ -17,9 +17,15 @@ public class ImportGraph {
     // 0 is used as an error and should never happen ....
     private static Integer next_country_id = 1;
     private static Integer next_genre_id = 1;
+    private static Integer next_keyword_id = 1;
+    private static Integer next_language_id = 1;
+    private static Integer next_location_id = 1;
 
     private static TreeMap<String, Integer> country_id_map = new TreeMap<>();
     private static TreeMap<String, Integer> genre_id_map = new TreeMap<>();
+    private static TreeMap<String, Integer> keyword_id_map = new TreeMap<>();
+    private static TreeMap<String, Integer> language_id_map = new TreeMap<>();
+    private static TreeMap<String, Integer> location_id_map = new TreeMap<>();
 
     private static Integer get_country_id(String s) {
         Integer id = country_id_map.get(s);
@@ -41,6 +47,38 @@ public class ImportGraph {
         return id;
     }
 
+    private static Integer get_keyword_id(String s) {
+        Integer id = keyword_id_map.get(s);
+        if (id == null) {
+            keyword_id_map.put(s, next_keyword_id);
+            id = next_keyword_id;
+            next_keyword_id++;
+        }
+        return id;
+    }
+
+    private static Integer get_language_id(String s) {
+        Integer id = language_id_map.get(s);
+        if (id == null) {
+            language_id_map.put(s, next_language_id);
+            id = next_language_id;
+            next_language_id++;
+        }
+        return id;
+    }
+
+    private static Integer get_location_id(String s) {
+        Integer id = location_id_map.get(s);
+        if (id == null) {
+            location_id_map.put(s, next_location_id);
+            id = next_location_id;
+            next_location_id++;
+        }
+        return id;
+    }
+
+
+
     public static void main(String[] args) throws Exception {
 
         String document_db_dir = args[0];
@@ -51,7 +89,7 @@ public class ImportGraph {
         try (MovieDB database = MovieDB.open(document_db_dir)) {
 
             FileWriter f_person = new FileWriter(csv_dir + "/person.csv");
-            f_person.write("personID:ID(Person)|name:string|gender:string|:LABEL\n");
+            f_person.write("person_id:ID(Person)|name:string|gender:string|:LABEL\n");
 
             // scan persons
             for (Person person : database.getByNamePrefix("")) {
@@ -71,9 +109,7 @@ public class ImportGraph {
             // Must use ID-spaces since movie ids and person ids overlap in large data set
 
             FileWriter f_movie = new FileWriter(csv_dir + "/movie.csv");
-            // FIX Keywords ... ?
-            // f_movie.write("movieID:ID(Movie)|title:string|year:int|running_times:string[]|keywords:string[]|:LABEL\n");
-            f_movie.write("movieID:ID(Movie)|title:string|year:int|running_times:string[]|:LABEL\n");
+            f_movie.write("movie_id:ID(Movie)|title:string|year:int|color_info:string[]|running_times:string[]|:LABEL\n");
 
             FileWriter f_acts_in = new FileWriter(csv_dir + "/acts_in.csv");
             f_acts_in.write(":START_ID(Person)|:END_ID(Movie)|:TYPE|role:string|position:int|info:string\n");
@@ -111,27 +147,71 @@ public class ImportGraph {
             FileWriter f_has_genre = new FileWriter(csv_dir + "/has_genre.csv");
             f_has_genre.write(":START_ID(Movie)|:END_ID(Genre)|:TYPE\n");
 
+            FileWriter f_has_keyword = new FileWriter(csv_dir + "/has_keyword.csv");
+            f_has_keyword.write(":START_ID(Movie)|:END_ID(Keyword)|:TYPE\n");
+
+            FileWriter f_has_language = new FileWriter(csv_dir + "/has_language.csv");
+            f_has_language.write(":START_ID(Movie)|:END_ID(Language)|:TYPE|note:string\n");
+
+            FileWriter f_has_location = new FileWriter(csv_dir + "/has_location.csv");
+            f_has_location.write(":START_ID(Movie)|:END_ID(Location)|:TYPE|note:string\n");
+
             // scan movies
             for (Movie movie : database.getByTitlePrefix("")) {
                 int mid = movie.getId();
-                String keywords = "";
-                String running_times = "";
 
-                // gather list-based movie properties
-                // list properties are ;-separated
                 if (movie.getKeywords() != null) {
-                    boolean first = true;
                     for (String s : movie.getKeywords()) {
-                        if (first) {
-                            keywords = s;
-                            first = false;
-                        } else {
-                            keywords = keywords + ";" + s;
-                        }
+                        Integer kid = get_keyword_id(s);
+                        if (kid == null) kid = 0; // should never happen!
+                        f_has_keyword.write(mid +
+                                          "|" +
+                                          kid +
+                                          "|HAS_KEYWORD\n");
+
+                    }
+                }
+                if (movie.getLanguages() != null) {
+                    for (Language l : movie.getLanguages()) {
+                        String s = l.getLanguage(); 
+                        Integer lid = get_language_id(s);
+                        if (lid == null) lid = 0; // should never happen!
+                        String note = l.getNote();
+                        if (note == null) note = "";
+                        f_has_language.write(mid +
+					     "|" +
+					     lid +
+					     "|HAS_LANGUAGE|" +
+                                             note.replace("\"", "\\\"") +
+					     "\n");
+
+                    }
+                }
+                if (movie.getLocations() != null) {
+                    for (Location l : movie.getLocations()) {
+                        String s = l.getLocation(); 
+                        Integer lid = get_location_id(s);
+                        if (lid == null) lid = 0; // should never happen!
+                        String note = l.getNote();
+                        if (note == null) note = "";
+                        f_has_location.write(mid +
+					     "|" +
+					     lid +
+					     "|HAS_LOCATION|" +
+                                             note.replace("\"", "\\\"") +
+					     "\n");
+
                     }
                 }
 
-                // since running times are already strange, just append note to the running time!
+
+                // gather list-based movie properties
+                // list properties are ;-separated
+                String running_times = "";
+                String color_info = "";
+
+
+                // append note to the running time!
                 if (movie.getRunningTimes() != null) {
                     boolean first = true;
                     for (RunningTime t : movie.getRunningTimes()) {
@@ -147,6 +227,23 @@ public class ImportGraph {
                     }
                 }
 
+                // append note to the color info!
+                if (movie.getColorInfo() != null) {
+                    boolean first = true;
+                    for (ColorInfo t : movie.getColorInfo()) {
+                        String color = t.getColorInfo();
+                        String note = t.getNote();
+                        if (note != null) color = color + ":" + note.replace("\"", "\\\"");
+                        if (first) {
+                            color_info = color;
+                            first = false;
+                        } else {
+                            color_info = color_info + ";" + color;
+                        }
+                    }
+                }
+
+
                 // output movie record
                 String title = movie.getTitle();
                 if (title == null) title = ""; // you never know ...
@@ -156,14 +253,21 @@ public class ImportGraph {
                               "|" +
                               movie.getYear() +
                               "|" +
+                              color_info +
+                              "|" +
                               running_times +
-                              // FIX KEYWORDS ?
-                              // When these are included all movie properties vanish in Neo4j!
-                              // Are some keyword lists too long (600 keywords) for Neo4j?
-                              // Or is there another problem?
-                              // "|" +
-                              // keywords +
                               "|Movie\n");
+
+                if (movie.getGenres() != null) {
+                    for (String s : movie.getGenres()) {
+                        Integer genre_id = get_genre_id(s);
+                        if (genre_id == null) genre_id = 0; // should never happen!
+                        f_has_genre.write(mid +
+                                          "|" +
+                                          genre_id +
+                                          "|HAS_GENRE\n");
+                    }
+                }
 
                 if (movie.getCertificates() != null) {
                     for (Certificate c : movie.getCertificates()) {
@@ -233,7 +337,7 @@ public class ImportGraph {
                                         "|" +
                                         mid +
                                         "|" +
-                                        "ACTED_IN" +
+                                        "ACTS_IN" +
                                         "|" +
                                         character.replace("\"", "\\\"") +
                                         "|" +
@@ -252,7 +356,7 @@ public class ImportGraph {
                                        "|" +
                                        mid +
                                        "|" +
-                                       "WAS_CINEMATOGRAPHER_FOR" +
+                                       "CINEMATOGRAPHER_FOR" +
                                        "|" +
                                        info.replace("\"", "\\\"") +
                                        "\n");
@@ -267,7 +371,7 @@ public class ImportGraph {
                                         "|" +
                                         mid +
                                         "|" +
-                                        "WAS_COMPOSER_FOR" +
+                                        "COMPOSER_FOR" +
                                         "|" +
                                         info.replace("\"", "\\\"") +
                                         "\n");
@@ -355,18 +459,7 @@ public class ImportGraph {
                     }
                 }
 
-                if (movie.getGenres() != null) {
-                    for (String s : movie.getGenres()) {
-                        Integer genre_id = get_genre_id(s);
-                        if (genre_id == null) genre_id = 0; // should never happen!
-                        f_has_genre.write(mid +
-                                          "|" +
-                                          genre_id +
-                                          "|HAS_GENRE\n");
-                    }
-                }
             }
-
             f_movie.close();
             f_acts_in.close();
             f_compose.close();
@@ -380,11 +473,14 @@ public class ImportGraph {
             f_certificates.close();
             f_release_dates.close();
             f_has_genre.close();
+            f_has_keyword.close();
+            f_has_language.close();
+            f_has_location.close();
 
-            // Finally, output countries, genres
+            // Finally, output nodes for countries, genres, keywords, languages, locations 
 
             FileWriter f_country = new FileWriter(csv_dir + "/country.csv");
-            f_country.write("countryID:ID(Country)|country:string|:LABEL\n");
+            f_country.write("country_id:ID(Country)|country:string|:LABEL\n");
 
             for (Map.Entry<String, Integer> map_entry : country_id_map.entrySet()) {
                 f_country.write(map_entry.getValue() +
@@ -395,7 +491,7 @@ public class ImportGraph {
             f_country.close();
 
             FileWriter f_genres = new FileWriter(csv_dir + "/genres.csv");
-            f_genres.write("genreID:ID(Genre)|genre:string|:LABEL\n");
+            f_genres.write("genre_id:ID(Genre)|genre:string|:LABEL\n");
 
             for (Map.Entry<String, Integer> map_entry : genre_id_map.entrySet()) {
                 f_genres.write(map_entry.getValue() +
@@ -404,6 +500,45 @@ public class ImportGraph {
                                "|Genre\n");
             }
             f_genres.close();
+
+            FileWriter f_keywords = new FileWriter(csv_dir + "/keywords.csv");
+            f_keywords.write("keyword_id:ID(Keyword)|keyword:string|:LABEL\n");
+
+            for (Map.Entry<String, Integer> map_entry : keyword_id_map.entrySet()) {
+		String s = map_entry.getKey(); 
+                f_keywords.write(map_entry.getValue() +
+                               "|" +
+                               s.replace("\"", "\\\"") +
+                               "|Keyword\n");
+            }
+            f_keywords.close();
+
+
+
+            FileWriter f_languages = new FileWriter(csv_dir + "/languages.csv");
+            f_languages.write("language_id:ID(Language)|language:string|:LABEL\n");
+
+            for (Map.Entry<String, Integer> map_entry : language_id_map.entrySet()) {
+                f_languages.write(map_entry.getValue() +
+                               "|" +
+                               map_entry.getKey() +
+                               "|Language\n");
+            }
+            f_languages.close();
+
+
+            FileWriter f_locations = new FileWriter(csv_dir + "/locations.csv");
+            f_locations.write("location_id:ID(Location)|location:string|:LABEL\n");
+
+            for (Map.Entry<String, Integer> map_entry : location_id_map.entrySet()) {
+		String s = map_entry.getKey(); 
+                f_locations.write(map_entry.getValue() +
+                               "|" +
+                               s.replace("\"", "\\\"") + 
+                               "|Location\n");
+            }
+            f_locations.close();
+
         }
 
         ImportTool.main(new String[] {
@@ -413,6 +548,9 @@ public class ImportGraph {
             "--nodes", csv_dir + "/person.csv",
             "--nodes", csv_dir + "/country.csv",
             "--nodes", csv_dir + "/genres.csv",
+            "--nodes", csv_dir + "/keywords.csv",
+            "--nodes", csv_dir + "/languages.csv",
+            "--nodes", csv_dir + "/locations.csv",
             "--relationships", csv_dir + "/acts_in.csv",
             "--relationships", csv_dir + "/directs.csv",
             "--relationships", csv_dir + "/camera.csv",
@@ -424,6 +562,9 @@ public class ImportGraph {
             "--relationships", csv_dir + "/certificates.csv",
             "--relationships", csv_dir + "/release_dates.csv", 
             "--relationships", csv_dir + "/has_genre.csv",
+            "--relationships", csv_dir + "/has_keyword.csv",
+            "--relationships", csv_dir + "/has_language.csv",
+            "--relationships", csv_dir + "/has_location.csv",
             "--relationships", csv_dir + "/writes.csv"
         });
     }

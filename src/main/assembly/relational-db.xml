@@ -11,9 +11,9 @@
             <includes>
                 <include>uk.ac.cam.cl.databases.moviedb:moviedb-exercises</include>
                 <include>org.hsqldb:hsqldb</include>
+                <include>org.hsqldb:sqltool</include>
             </includes>
             <excludes>
-                <exclude>org.hsqldb:sqltool</exclude>
                 <exclude>com.google.code.gson:gson</exclude>
                 <exclude>com.sleepycat:je</exclude>
                 <exclude>org.postgresql:postgresql</exclude>

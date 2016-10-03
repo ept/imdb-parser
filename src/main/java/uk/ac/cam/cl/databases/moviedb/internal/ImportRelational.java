@@ -106,7 +106,7 @@ public class ImportRelational {
             "person_id integer NOT NULL REFERENCES people (id), " +
             "movie_id integer NOT NULL REFERENCES movies (id), " +
             "type varchar(20) NOT NULL, " +
-            "info varchar(255), " +
+            "note varchar(255), " +
             "character varchar(255), " +
             "position integer, " +
             "line_order integer, " +
@@ -114,11 +114,11 @@ public class ImportRelational {
             "subgroup_order integer, " +
             "UNIQUE (person_id, movie_id, type))");
 
-        try (PreparedStatement insert = hsql.prepareStatement("INSERT INTO credits (person_id, movie_id, type, info, character, position, line_order, group_order, subgroup_order) values(?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        try (PreparedStatement insert = hsql.prepareStatement("INSERT INTO credits (person_id, movie_id, type, note, character, position, line_order, group_order, subgroup_order) values(?, ?, ?, ?, ?, ?, ?, ?, ?)");
                 Statement select = pg.createStatement()) {
             ResultSet results = select.executeQuery(
                 "SELECT person_id, movie_id, type, " +
-                "credits.properties->>'info', " +
+                "credits.properties->>'note', " +
                 "credits.properties->>'character', " +
                 "credits.properties->>'position', " +
                 "credits.properties->>'line_order', " +

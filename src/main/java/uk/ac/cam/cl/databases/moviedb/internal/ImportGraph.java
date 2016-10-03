@@ -112,31 +112,31 @@ public class ImportGraph {
             f_movie.write("movie_id:ID(Movie)|title:string|year:int|color_info:string[]|running_times:string[]|:LABEL\n");
 
             FileWriter f_acts_in = new FileWriter(csv_dir + "/acts_in.csv");
-            f_acts_in.write(":START_ID(Person)|:END_ID(Movie)|:TYPE|role:string|position:int|info:string\n");
+            f_acts_in.write(":START_ID(Person)|:END_ID(Movie)|:TYPE|role:string|position:int|note:string\n");
 
             FileWriter f_directs = new FileWriter(csv_dir + "/directs.csv");
-            f_directs.write(":START_ID(Person)|:END_ID(Movie)|:TYPE|info:string\n");
+            f_directs.write(":START_ID(Person)|:END_ID(Movie)|:TYPE|note:string\n");
 
             FileWriter f_camera = new FileWriter(csv_dir + "/camera.csv");
-            f_camera.write(":START_ID(Person)|:END_ID(Movie)|:TYPE|info:string\n");
+            f_camera.write(":START_ID(Person)|:END_ID(Movie)|:TYPE|note:string\n");
 
             FileWriter f_compose = new FileWriter(csv_dir + "/compose.csv");
-            f_compose.write(":START_ID(Person)|:END_ID(Movie)|:TYPE|info:string\n");
+            f_compose.write(":START_ID(Person)|:END_ID(Movie)|:TYPE|note:string\n");
 
             FileWriter f_edits = new FileWriter(csv_dir + "/edits.csv");
-            f_edits.write(":START_ID(Person)|:END_ID(Movie)|:TYPE|info:string\n");
+            f_edits.write(":START_ID(Person)|:END_ID(Movie)|:TYPE|note:string\n");
 
             FileWriter f_produces = new FileWriter(csv_dir + "/produces.csv");
-            f_produces.write(":START_ID(Person)|:END_ID(Movie)|:TYPE|info:string\n");
+            f_produces.write(":START_ID(Person)|:END_ID(Movie)|:TYPE|note:string\n");
 
             FileWriter f_prod_design = new FileWriter(csv_dir + "/production_design.csv");
-            f_prod_design.write(":START_ID(Person)|:END_ID(Movie)|:TYPE|info:string\n");
+            f_prod_design.write(":START_ID(Person)|:END_ID(Movie)|:TYPE|note:string\n");
 
             FileWriter f_design = new FileWriter(csv_dir + "/costume_design.csv");
-            f_design.write(":START_ID(Person)|:END_ID(Movie)|:TYPE|info:string\n");
+            f_design.write(":START_ID(Person)|:END_ID(Movie)|:TYPE|note:string\n");
 
             FileWriter f_writes = new FileWriter(csv_dir + "/writes.csv");
-            f_writes.write(":START_ID(Person)|:END_ID(Movie)|:TYPE|info:string|line_order:int|group_order:int|subgroup_order:int\n");
+            f_writes.write(":START_ID(Person)|:END_ID(Movie)|:TYPE|note:string|line_order:int|group_order:int|subgroup_order:int\n");
 
             FileWriter f_release_dates = new FileWriter(csv_dir + "/release_dates.csv");
             f_release_dates.write(":START_ID(Movie)|:END_ID(Country)|:TYPE|date:string|note:string\n");
@@ -311,15 +311,15 @@ public class ImportGraph {
 
                 if (movie.getDirectors() != null) {
                     for (CreditPerson p : movie.getDirectors()) {
-                        String info = p.getInfo();
-                        if (info == null) info = "";
+                        String note = p.getNote();
+                        if (note == null) note = "";
                         f_directs.write(p.getPersonId() +
                                         "|" +
                                         mid +
                                         "|" +
                                         "DIRECTED" +
                                         "|" +
-                                        info.replace("\"", "\\\"") +
+                                        note.replace("\"", "\\\"") +
                                         "\n");
                     }
                 }
@@ -327,10 +327,10 @@ public class ImportGraph {
                 if (movie.getActors() != null) {
                     for (CreditActor p : movie.getActors()) {
                         Integer pos = p.getPosition();
-                        String info = p.getInfo();
+                        String note = p.getNote();
                         String character = p.getCharacter();
 
-                        if (info == null) info = "";
+                        if (note == null) note = "";
                         if (character == null) character = "";
 
                         f_acts_in.write(p.getPersonId() +
@@ -343,112 +343,112 @@ public class ImportGraph {
                                         "|" +
                                         ((pos == null) ? 0 : pos) + // really?
                                         "|" +
-                                        info.replace("\"", "\\\"") +
+                                        note.replace("\"", "\\\"") +
                                         "\n");
                     }
                 }
 
                 if (movie.getCinematographers() != null) {
                     for (CreditPerson p : movie.getCinematographers()) {
-                        String info = p.getInfo();
-                        if (info == null) info = "";
+                        String note = p.getNote();
+                        if (note == null) note = "";
                         f_camera.write(p.getPersonId() +
                                        "|" +
                                        mid +
                                        "|" +
                                        "CINEMATOGRAPHER_FOR" +
                                        "|" +
-                                       info.replace("\"", "\\\"") +
+                                       note.replace("\"", "\\\"") +
                                        "\n");
                     }
                 }
 
                 if (movie.getComposers() != null) {
                     for (CreditPerson p : movie.getComposers()) {
-                        String info = p.getInfo();
-                        if (info == null) info = "";
+                        String note = p.getNote();
+                        if (note == null) note = "";
                         f_compose.write(p.getPersonId() +
                                         "|" +
                                         mid +
                                         "|" +
                                         "COMPOSER_FOR" +
                                         "|" +
-                                        info.replace("\"", "\\\"") +
+                                        note.replace("\"", "\\\"") +
                                         "\n");
                     }
                 }
 
                 if (movie.getEditors() != null) {
                     for (CreditPerson p : movie.getEditors()) {
-                        String info = p.getInfo();
-                        if (info == null) info = "";
+                        String note = p.getNote();
+                        if (note == null) note = "";
                         f_edits.write(p.getPersonId() +
                                       "|" +
                                       mid +
                                       "|" +
                                       "EDITED" +
                                       "|" +
-                                      info.replace("\"", "\\\"") +
+                                      note.replace("\"", "\\\"") +
                                       "\n");
                     }
                 }
 
                 if (movie.getCostumeDesigners() != null) {
                     for (CreditPerson p : movie.getCostumeDesigners()) {
-                        String info = p.getInfo();
-                        if (info == null) info = "";
+                        String note = p.getNote();
+                        if (note == null) note = "";
                         f_design.write(p.getPersonId() +
                                        "|" +
                                        mid +
                                        "|" +
                                        "COSTUME_DESIGNER_FOR" +
                                        "|" +
-                                       info.replace("\"", "\\\"") +
+                                       note.replace("\"", "\\\"") +
                                        "\n");
                     }
                 }
 
                 if (movie.getProductionDesigners() != null) {
                     for (CreditPerson p : movie.getProductionDesigners()) {
-                        String info = p.getInfo();
-                        if (info == null) info = "";
+                        String note = p.getNote();
+                        if (note == null) note = "";
                         f_prod_design.write(p.getPersonId() +
                                             "|" +
                                             mid +
                                             "|" +
                                             "PRODUCTION_DESIGNER_FOR" +
                                             "|" +
-                                            info.replace("\"", "\\\"") +
+                                            note.replace("\"", "\\\"") +
                                             "\n");
                     }
                 }
 
                 if (movie.getProducers() != null) {
                     for (CreditPerson p : movie.getProducers()) {
-                        String info = p.getInfo();
-                        if (info == null) info = "";
+                        String note = p.getNote();
+                        if (note == null) note = "";
                         f_produces.write(p.getPersonId() +
                                          "|" +
                                          mid +
                                          "|" +
                                          "PRODUCED" +
                                          "|" +
-                                         info.replace("\"", "\\\"") +
+                                         note.replace("\"", "\\\"") +
                                          "\n");
                     }
                 }
 
                 if (movie.getWriters() != null) {
                     for (CreditWriter p : movie.getWriters()) {
-                        String info = p.getInfo();
-                        if (info == null) info = "";
+                        String note = p.getNote();
+                        if (note == null) note = "";
                         f_writes.write(p.getPersonId() +
                                        "|" +
                                        mid +
                                        "|" +
                                        "WROTE" +
                                        "|" +
-                                       info.replace("\"", "\\\"") +
+                                       note.replace("\"", "\\\"") +
                                        "|" +
                                        p.getLineOrder() +
                                        "|" +

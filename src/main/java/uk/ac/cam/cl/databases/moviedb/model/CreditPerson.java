@@ -23,7 +23,7 @@ import uk.ac.cam.cl.databases.moviedb.MovieDB;
  */
 public class CreditPerson {
     private int personId;
-    private String name, info;
+    private String name, note;
 
     /**
      * Gets the unique numerical ID of the person who worked on this movie.
@@ -46,8 +46,8 @@ public class CreditPerson {
      * attribute</a> about the job that this person did on this movie, or about how they were
      * credited. This is usually a string in parantheses, for example <tt>"(project manager)"</tt>.
      */
-    public String getInfo() {
-        return info;
+    public String getNote() {
+        return note;
     }
 
     /**

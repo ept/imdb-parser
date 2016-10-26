@@ -203,31 +203,35 @@ public class MovieDB implements AutoCloseable {
     public void close() {
         if (dbEnv == null) return;
 
-        // Shutdown procedure as recommended in the BDB JE docs.
-        // http://docs.oracle.com/cd/E17277_02/html/java/com/sleepycat/je/Environment.html#close()
-        // Stop the cleaner daemon threads.
-        EnvironmentMutableConfig config = dbEnv.getMutableConfig();
-        config.setConfigParam(EnvironmentConfig.ENV_RUN_CLEANER, "false");
-        dbEnv.setMutableConfig(config);
-        dbEnv.cleanLog();
+        try {
+            // Shutdown procedure as recommended in the BDB JE docs.
+            // http://docs.oracle.com/cd/E17277_02/html/java/com/sleepycat/je/Environment.html#close()
+            // Stop the cleaner daemon threads.
+            EnvironmentMutableConfig config = dbEnv.getMutableConfig();
+            config.setConfigParam(EnvironmentConfig.ENV_RUN_CLEANER, "false");
+            dbEnv.setMutableConfig(config);
+            dbEnv.cleanLog();
 
-        // Perform an extra checkpoint
-        dbEnv.checkpoint(new CheckpointConfig().setForce(true));
+            // Perform an extra checkpoint
+            dbEnv.checkpoint(new CheckpointConfig().setForce(true));
 
-        if (titleIndex != null) titleIndex.close();
-        titleIndex = null;
+            if (titleIndex != null) titleIndex.close();
+            titleIndex = null;
 
-        if (nameIndex != null) nameIndex.close();
-        nameIndex = null;
+            if (nameIndex != null) nameIndex.close();
+            nameIndex = null;
 
-        if (moviesDB != null) moviesDB.close();
-        moviesDB = null;
+            if (moviesDB != null) moviesDB.close();
+            moviesDB = null;
 
-        if (peopleDB != null) peopleDB.close();
-        peopleDB = null;
+            if (peopleDB != null) peopleDB.close();
+            peopleDB = null;
 
-        dbEnv.close();
-        dbEnv = null;
+            dbEnv.close();
+            dbEnv = null;
+        } catch (Exception e) {
+            // Swallow any exceptions during shutdown, because they hide exceptions from user bugs
+        }
     }
 
     /**
